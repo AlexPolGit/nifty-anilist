@@ -50,17 +50,11 @@ def is_token_expired(token: str) -> bool:
     payload = jwt.decode(token, options={"verify_signature": False})
     exp = payload.get("exp")
 
-    expired = False
-
-    if exp is None:
-        expired = True
-    if exp < time.time():
-        expired = True
-
-    if expired:
+    if exp is None or exp < time.time():
         print("Auth token is expired! Need to get a new one...")
-    
-    return expired
+        return True
+    else:
+        return False
 
 
 def get_auth_code_from_browser() -> str:
@@ -80,7 +74,7 @@ def get_auth_code_from_browser() -> str:
 
     # Wait for redirect to callback page with code.
     WebDriverWait(driver, 300).until(
-        expected_conditions.url_contains("https://oauth.pstmn.io/v1/browser-callback?code=")
+        expected_conditions.url_contains(f"{anilist_settings.anilist_client_redirect_url}?code=")
     )
 
     # Extract the code from the URL

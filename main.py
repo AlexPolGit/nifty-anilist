@@ -1,10 +1,9 @@
-import requests
+import asyncio
 
-from src.settings import anilist_settings
-from src.util.auth import get_auth_token
+from src.util.request import anilist_request
 
-if __name__ == "__main__":
-    token = get_auth_token()
+async def test_get_avatar():
+    username = input('Username: ')
 
     query = """
         query GetUserAvatar($name: String) {
@@ -17,20 +16,14 @@ if __name__ == "__main__":
     """
 
     variables = {
-        "name": "AlexP"
+        "name": username
     }
 
-    response = requests.post(
-        url=anilist_settings.anilist_api_url,
-        headers= {
-			'Authorization': 'Bearer ' + token,
-			'Content-Type': 'application/json',
-			'Accept': 'application/json',
-		},
-        json={"query": query, "variables": variables}
-    )
-    data = response.json()
+    data = await anilist_request(query=query, variables=variables)
 
     # Access the avatar URL
     avatar_url = data["data"]["User"]["avatar"]["large"]
     print("Avatar URL:", avatar_url)
+
+if __name__ == "__main__":
+    asyncio.run(test_get_avatar())
