@@ -1,10 +1,10 @@
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 from importlib.resources import files, as_file
 from gql import Client, GraphQLRequest
 from gql.transport.aiohttp import AIOHTTPTransport
 
 from nifty_anilist.settings import anilist_settings
-from nifty_anilist.auth import get_auth_token
+from nifty_anilist.auth import get_auth_info
 
 
 def schema() -> str:
@@ -22,11 +22,12 @@ def schema() -> str:
             return schema_string
 
 
-async def anilist_request(query_request: GraphQLRequest, use_athh: bool = True) -> Dict[str, Any]:
+async def anilist_request(query_request: GraphQLRequest, user_id: Optional[str] = None, use_auth: bool = True) -> Dict[str, Any]:
     """Make a request to the Anilist GraphQL API.
 
     Args:
         query_request: GraphQL query to make to the API.
+        user_od" ID of the user to use for authentiation. Leave empty to use the global user.
         use_auth: Whether to auth the auth header or not. Default is `True`.
 
     Returns:
@@ -35,9 +36,9 @@ async def anilist_request(query_request: GraphQLRequest, use_athh: bool = True) 
 
     headers = {}
 
-    if use_athh:
-        token = get_auth_token()
-        headers["Authorization"] = f"Bearer {token}"
+    if use_auth:
+        auth_info = get_auth_info(user_id)
+        headers["Authorization"] = f"Bearer {auth_info.token}"
 
     transport = AIOHTTPTransport(
         url=anilist_settings.anilist_api_url,

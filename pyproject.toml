@@ -13,6 +13,7 @@ dependencies = [
     "colorama>=0.4.6",
     "gql[all]>=4.0.0",
     "httpx>=0.28.1",
+    "keyring>=25.6.0",
     "pydantic>=2.11.9",
     "pydantic-settings>=2.11.0",
     "pyjwt>=2.10.1",
@@ -31,3 +32,8 @@ include-package-data = true
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+]

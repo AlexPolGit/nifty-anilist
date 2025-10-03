@@ -1,5 +1,12 @@
-from pathlib import Path
-from pydantic_settings import BaseSettings
+from enum import StrEnum
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class TokenSavingMethod(StrEnum):
+    """Enum for types of token-saving methods."""
+    
+    KEYRING = "KEYRING"
+    IN_MEMORY = "IN_MEMORY"
 
 
 class AnilistSettings(BaseSettings):
@@ -8,9 +15,10 @@ class AnilistSettings(BaseSettings):
     """
 
     # Configuration for the settings object.
-    class Config:
-        env_file = ".env"
-        extra = "ignore"
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        extra="ignore"
+    )
 
     # General
     anilist_api_url: str = "https://graphql.anilist.co"
@@ -33,5 +41,9 @@ class AnilistSettings(BaseSettings):
 
     anilist_auth_code_brower_timeout_seconds: int = 300
     """Seconds to wait before timing out when getting auth code from browser."""
+
+    token_saving_method: TokenSavingMethod = TokenSavingMethod.KEYRING
+    """What method to use for storing use auth tokens on the local machine."""
+
 
 anilist_settings = AnilistSettings() # type: ignore
