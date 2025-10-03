@@ -18,6 +18,7 @@ async def anilist_request(query: str, variables: Optional[dict] = None) -> Any:
             json={"query": query, "variables": variables}
         )
 
+        response.raise_for_status()
         data = response.json()
 
         return data

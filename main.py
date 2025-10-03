@@ -1,6 +1,8 @@
 import asyncio
 
+from src.util.logging import anilist_logger as logger
 from src.util.request import anilist_request
+
 
 async def test_get_avatar():
     username = input('Username: ')
@@ -23,7 +25,8 @@ async def test_get_avatar():
 
     # Access the avatar URL
     avatar_url = data["data"]["User"]["avatar"]["large"]
-    print("Avatar URL:", avatar_url)
+    logger.info(f"Avatar URL: {avatar_url}")
+
 
 if __name__ == "__main__":
     asyncio.run(test_get_avatar())
