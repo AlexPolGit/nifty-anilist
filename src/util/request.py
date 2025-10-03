@@ -1,24 +1,46 @@
-from typing import Any, Optional
-import httpx
+from typing import Any, Dict
+from gql import Client, GraphQLRequest
+from gql.transport.aiohttp import AIOHTTPTransport
 
 from src.settings import anilist_settings
 from src.util.auth import get_auth_token
 
-async def anilist_request(query: str, variables: Optional[dict] = None) -> Any:
-    token = get_auth_token()
+def schema() -> str:
+    """Get the Anilist API GraphQL schema.
+    Will get the schema from local files.
+    
+    Returns:
+        schema_string: Anilist API GraphQL schema as a string.
+    """
+    with open(anilist_settings.anilist_schema_path) as f:
+        schema_string = f.read()
+        return schema_string
 
-    async with httpx.AsyncClient() as client:
-        response = await client.post(
-            url=anilist_settings.anilist_api_url,
-            headers= {
-                'Authorization': 'Bearer ' + token,
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            json={"query": query, "variables": variables}
-        )
+async def anilist_request(query_request: GraphQLRequest, use_athh: bool = True) -> Dict[str, Any]:
+    """Make a request to the Anilist GraphQL API.
 
-        response.raise_for_status()
-        data = response.json()
+    Args:
+        query_request: GraphQL query to make to the API.
+        use_auth: Whether to auth the auth header or not. Default is `True`.
 
-        return data
+    Returns:
+        result: Result of the query, as a dictionary.
+    """
+
+    headers = {}
+
+    if use_athh:
+        token = get_auth_token()
+        headers["Authorization"] = f"Bearer {token}"
+
+    transport = AIOHTTPTransport(
+        url=anilist_settings.anilist_api_url,
+        headers=headers
+    )
+
+    client = Client(transport=transport, schema=schema())
+
+    async with client as session:
+        result = await session.execute(query_request)
+        
+        return result

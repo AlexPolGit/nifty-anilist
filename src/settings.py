@@ -1,7 +1,12 @@
+from pathlib import Path
 from pydantic_settings import BaseSettings
 
 
 class AnilistSettings(BaseSettings):
+    """Settings for Anilist-related things.
+    Will be populated from environment variables or the local `.env` file.
+    """
+
     # Configuration for the settings object.
     class Config:
         env_file = ".env"
@@ -11,6 +16,7 @@ class AnilistSettings(BaseSettings):
     anilist_api_url: str = "https://graphql.anilist.co"
     anilist_auth_url: str = "https://anilist.co/api/v2/oauth/authorize"
     anilist_token_url: str = "https://anilist.co/api/v2/oauth/token"
+    anilist_schema_path: Path = Path("src/anilist_schema.graphql")
 
     # Auth
     anilist_client_id: str
