@@ -30,26 +30,28 @@ There are two ways that auth headers can be added to your requests:
 ```py
 async def do_something():
     request = gql("some query")
-    anilist_request(request)
+    return await anilist_request(request)
 
 if __name__ == "__main__":
     sign_in_if_no_global()
-    asyncio.run(do_something())
+    data = asyncio.run(do_something())
+    print(data)
 ```
 2. Manually passing in a user ID to the `anilist_request()` with the `user_id` parameter will try to get that user's token from local storage and use it instead of the global one. Example:
 ```py
 async def do_something(user_id: str):
     request = gql("some query")
-    anilist_request(request, user_id=user_id)
+    return await anilist_request(request, user_id=user_id)
 
 if __name__ == "__main__":
     my_user_id = "12345"
-    asyncio.run(do_something(user_id=my_user_id))
+    data = asyncio.run(do_something(user_id=my_user_id))
+    print(data)
 ```
 
 You can also choose to not use auth on requests with the `use_auth` parameter (default is `True`):
 ```py
 async def do_something():
     request = gql("some query")
-    anilist_request(request, use_auth=False)
+    return await anilist_request(request, use_auth=False)
 ```
