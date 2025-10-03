@@ -7,8 +7,8 @@ from selenium.webdriver.support import expected_conditions
 import jwt
 from dotenv import get_key, set_key
 
-from src.util.logging import anilist_logger as logger
-from src.settings import anilist_settings
+from nifty_anilist.logging import anilist_logger as logger
+from nifty_anilist.settings import anilist_settings
 
 
 def get_auth_token() -> str:

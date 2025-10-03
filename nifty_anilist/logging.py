@@ -1,5 +1,6 @@
 import structlog
 
+
 anilist_logger = structlog.wrap_logger(
     structlog.get_logger(),
     processors=[
