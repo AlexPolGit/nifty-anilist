@@ -51,11 +51,11 @@ class TestAuthenticationFunctions:
 
 
     def test_multi_user_workflow(self):
-        path_dotenv_path = patch("nifty_anilist.auth.DOTENV_PATH", DOTENV_PATH)
+        patch_dotenv_path = patch("nifty_anilist.auth.DOTENV_PATH", DOTENV_PATH)
         patch_token_saving_method = patch("nifty_anilist.utils.auth_utils.anilist_settings.token_saving_method", TokenSavingMethod.IN_MEMORY)
         patch_generate_new_token = patch("nifty_anilist.auth.generate_new_token", side_effect=[MOCK_AUTH_TOKEN_1, MOCK_AUTH_TOKEN_2, MOCK_AUTH_TOKEN_2])
         
-        with path_dotenv_path, patch_token_saving_method, patch_generate_new_token:
+        with patch_dotenv_path, patch_token_saving_method, patch_generate_new_token:
             # Test 1: Ensure you can get the auth info of a user either through the global user or directly.
             logout_global_user()
             assert get_global_user() == None

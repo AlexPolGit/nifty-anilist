@@ -30,7 +30,7 @@ def save_token(user_id: str, token: str) -> None:
     elif (anilist_settings.token_saving_method == TokenSavingMethod.IN_MEMORY):
         IN_MEMORY_TOKEN_STORAGE[user_id] = token
     else:
-        raise Exception("Unknown token storage method.")
+        raise ValueError("Unknown token storage method.")
 
 
 def get_token(user_id: str) -> Optional[str]:
@@ -44,7 +44,7 @@ def get_token(user_id: str) -> Optional[str]:
     elif (anilist_settings.token_saving_method == TokenSavingMethod.IN_MEMORY):
         return IN_MEMORY_TOKEN_STORAGE[user_id]
     else:
-        raise Exception("Unknown token storage method.")
+        raise ValueError("Unknown token storage method.")
 
 
 def delete_token(user_id: str) -> None:
@@ -63,7 +63,7 @@ def delete_token(user_id: str) -> None:
         except:
             raise
     else:
-        raise Exception("Unknown token storage method.")
+        raise ValueError("Unknown token storage method.")
 
 
 def generate_new_token() -> str:
@@ -81,21 +81,21 @@ def generate_new_token() -> str:
     
     # Send auth code to Anilist's token endpoint.
     response = httpx.post(
-        url=anilist_settings.anilist_token_url,
+        url=anilist_settings.token_url,
         data={
             'grant_type': 'authorization_code',
             'code': auth_code,
-            'redirect_uri': anilist_settings.anilist_client_redirect_url
+            'redirect_uri': anilist_settings.client_redirect_url
         },
         follow_redirects=False,
-        auth=(anilist_settings.anilist_client_id, anilist_settings.anilist_client_secret)
+        auth=(anilist_settings.client_id, anilist_settings.client_secret)
     )
 
     response.raise_for_status()
     data = response.json()
 
     if 'access_token' not in data:
-        raise Exception('Access token missing from AniList OAuth response.')
+        raise RuntimeError('Access token missing from AniList OAuth response.')
     
     logger.info("Aquired new auth token.")
     
@@ -115,7 +115,7 @@ def get_user_from_token(token: str) -> str:
     sub = payload.get("sub")
 
     if sub is None or not isinstance(sub, str):
-        raise Exception("User not found in auth token!")
+        raise RuntimeError("User not found in auth token!")
     else:
         return sub
 
@@ -150,9 +150,9 @@ def get_auth_code_from_browser() -> str:
     driver = webdriver.Chrome()
 
     # Setup AniList OAuth URL.
-    auth_url = f"{anilist_settings.anilist_auth_url}?" \
-        f"client_id={anilist_settings.anilist_client_id}&" \
-        f"redirect_uri={anilist_settings.anilist_client_redirect_url}&" \
+    auth_url = f"{anilist_settings.auth_url}?" \
+        f"client_id={anilist_settings.client_id}&" \
+        f"redirect_uri={anilist_settings.client_redirect_url}&" \
         f"response_type=code"
     
     logger.info(f"Opening auth page in Chrome: {auth_url}")
@@ -161,8 +161,8 @@ def get_auth_code_from_browser() -> str:
     driver.get(auth_url)
 
     # Wait for redirect to callback page with code.
-    WebDriverWait(driver, anilist_settings.anilist_auth_code_brower_timeout_seconds).until(
-        expected_conditions.url_contains(f"{anilist_settings.anilist_client_redirect_url}?code=")
+    WebDriverWait(driver, anilist_settings.auth_code_brower_timeout_seconds).until(
+        expected_conditions.url_contains(f"{anilist_settings.client_redirect_url}?code=")
     )
 
     # Extract the code from the URL
@@ -172,17 +172,17 @@ def get_auth_code_from_browser() -> str:
     driver.quit()
 
     if auth_code is None:
-        raise Exception("Failed to find an auth code from redirect URL.")
+        raise RuntimeError("Failed to find an auth code from redirect URL.")
 
     return auth_code
 
 
 def open_credential_manager():
-    """Open the credential manager for debugging purposes. **Note:** Only works on Windows."""
+    """Open the credential manager for debugging purposes. \n\n**Note:** Only works on Windows."""
     import platform
     import subprocess
 
     if platform.system() == "Windows":
         subprocess.run(["control", "/name", "Microsoft.CredentialManager"])
     else:
-        raise Exception("This function only supports Windows for now.")
+        raise SystemError("This function only supports Windows for now.")

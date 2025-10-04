@@ -1,6 +1,6 @@
 [project]
 name = "nifty_anilist"
-version = "0.1.1"
+version = "0.1.2"
 description = "Utilities for the Anilist GraphQL API."
 authors = [
     { name="Alexey Polishchuk", email="alexpolishchukmail@gmail.com" }
@@ -17,6 +17,7 @@ dependencies = [
     "pydantic>=2.11.9",
     "pydantic-settings>=2.11.0",
     "pyjwt>=2.10.1",
+    "pytest-asyncio>=1.2.0",
     "python-dotenv>=1.1.1",
     "selenium>=4.35.0",
     "structlog>=25.4.0",

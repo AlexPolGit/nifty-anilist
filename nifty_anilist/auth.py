@@ -43,18 +43,19 @@ def sign_in(set_global: bool = False) -> AuthInfo:
     return AuthInfo(user_id, auth_token)
 
 
-def sign_in_if_no_global() -> Optional[AuthInfo]:
+def sign_in_if_no_global() -> str:
     """Manually sign into Anilist if there is currently no global user.
     Will do nothing if there is already a global user.
     Run this near the start of your program to setup a global user (if you plan to use one).
     
     Returns:
-        auth_info: Auth info for the user, if there 
+        user_id: ID of the global user.
     """
-    if get_global_user() is None:
-        return sign_in(set_global=True)
+    global_user = get_global_user()
+    if global_user is None:
+        return sign_in(set_global=True).user_id
     else:
-        return None
+        return global_user
 
 
 def get_auth_info(user_id: Optional[str] = None) -> AuthInfo:
@@ -80,7 +81,7 @@ def get_auth_info(user_id: Optional[str] = None) -> AuthInfo:
         if user_id:
             auth_token = get_token(user_id)
         else:
-            raise Exception("No global user was found!")
+            raise ValueError("No global user was found!")
 
     # If token was not found or is expired, make a new one.
     if auth_token is None or is_token_expired(auth_token):
@@ -102,7 +103,7 @@ def get_global_user() -> Optional[str]:
 
 def set_global_user(user_id: str) -> AuthInfo:
     """Set the global user.
-    **Note:** This does *not* remove the previous user's auth token from your machine.
+    \n**Note:** This does *not* remove the previous user's auth token from your machine.
     
     Args:
         user_id: ID of the user to set the global user to.
@@ -116,7 +117,7 @@ def set_global_user(user_id: str) -> AuthInfo:
 
 def logout_global_user():
     """Log out the global user.
-    **Note:** This does *not* remove their auth token from your machine.
+    \n**Note:** This does *not* remove their auth token from your machine.
     """
     unset_key(DOTENV_PATH, GLOBAL_USER_ENV_VAR)
 
@@ -139,7 +140,7 @@ def remove_user(user_to_remove: Optional[str] = None) -> str:
         if user_to_remove:
             logout_global_user()
         else:
-            raise Exception("No global user was found to remove.") 
+            raise ValueError("No global user was found to remove.") 
 
     delete_token(user_to_remove)
 
