@@ -113,7 +113,7 @@ async def sleep_for_rate_limit(initial_delay: Optional[int], attempt: int, max_a
             delay = initial_delay + (attempt * 5)
         # Otherwise wait just over 1 minute and increment by 5 seconds every time.
         else:
-            delay = 61 + (attempt * 5)
+            delay = 69 + (attempt * 5)
 
     # Expect "TransportServerError" to be thrown when we get rate limited by the Anilist API.
     else:
