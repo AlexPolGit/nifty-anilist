@@ -3,7 +3,7 @@ from gql import gql
 
 from nifty_anilist.logging import anilist_logger as logger
 from nifty_anilist.auth import sign_in_if_no_global
-from nifty_anilist.request import anilist_request
+from nifty_anilist.client import AnilistClient
 
 
 async def test_get_avatar():
@@ -29,12 +29,13 @@ async def test_get_avatar():
         "name": username
     }
 
-    # Do query with global user.
-    data = await anilist_request(query_request=query)
+    async with AnilistClient() as client:
+        # Do query with global user.
+        data = await client.anilist_request(query_request=query)
 
-    # Access the avatar URL.
-    avatar_url = data["User"]["avatar"]["large"]
-    logger.info(f"Avatar URL: {avatar_url}")
+        # Access the avatar URL.
+        avatar_url = data["User"]["avatar"]["large"]
+        logger.info(f"Avatar URL: {avatar_url}")
 
 
 if __name__ == "__main__":

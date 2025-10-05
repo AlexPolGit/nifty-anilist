@@ -3,7 +3,7 @@ import pytest
 from gql import gql, GraphQLRequest
 
 from nifty_anilist.auth import AuthInfo
-from nifty_anilist.request import anilist_request
+from nifty_anilist.client import AnilistClient
 from nifty_anilist.settings import anilist_settings
 
 
@@ -44,11 +44,12 @@ class TestRequestFunctions():
                 "name": "robert" # Hi Robert!
             }
 
-            # Do query with global user.
-            data = await anilist_request(query_request=query)
+            async with AnilistClient() as client:
+                # Do query with global user.
+                data = await client.anilist_request(query_request=query)
 
-            # Access the avatar URL.
-            avatar_url = data["User"]["avatar"]["large"]
-            
-            assert isinstance(avatar_url, str)
-            assert avatar_url.startswith("https://s4.anilist.co/file/")
+                # Access the avatar URL.
+                avatar_url = data["User"]["avatar"]["large"]
+                
+                assert isinstance(avatar_url, str)
+                assert avatar_url.startswith("https://s4.anilist.co/file/")

@@ -11,7 +11,21 @@ To use this library, you will need to have the variables shown in [.env.example]
 ## Features
 
 ### GraphQL Requests
-The Anilist API is GraphQL-based and provides a [public schema](https://studio.apollographql.com/sandbox/schema/reference). This library uses [gql](https://github.com/graphql-python/gql) to make GraphQL requests. You should use the `anilist_request()` function in [request.py](./nifty_anilist/request.py) to make requests to Anilist.
+The Anilist API is GraphQL-based and provides a [public schema](https://studio.apollographql.com/sandbox/schema/reference). This library uses [gql](https://github.com/graphql-python/gql) to make GraphQL requests. 
+
+To make requests to Anilist, create an `AnilistClient` and use the `anilist_request()` function. Example:
+```py
+client = AnilistClient()
+async with client:
+    data = await client.anilist_request(my_query)
+
+# OR
+
+async with AnilistClient() as client:
+    data = await client.anilist_request(my_query)
+```
+
+The client takes an optional user ID to make requests for. If not provided, the client will try to use global user. You can also turn off authentication by setting `use_auth` to `False`.
 
 ### Anilist Auth
 
@@ -26,11 +40,12 @@ In order to get an auth token for the first time, you can use the `sign_in_if_no
 **Note:** The sign-in function currently opens an instance of Google Chrome to the Anilist login page, from which your auth code will be automatically extracted. There will be more ways to do sign-in later.
 
 There are two ways that auth headers can be added to your requests:
-1. Using a global user ID stored in the `.env` file: The ID is stored as `ANILIST_CURRENT_USER`. This is the user ID that will be used to retrieve the token from the storage method(s) above. When making requests with `anilist_request()`, you can ignore the optional `user_id` parameter to use this approach. Example:
+1. Using a global user ID stored in the `.env` file: The ID is stored as `ANILIST_CURRENT_USER`. This is the user ID that will be used to retrieve the token from the storage method(s) above. When making requests with the client's `anilist_request()`, you can ignore the optional `user_id` parameter to use this approach. Example:
 ```py
 async def do_something():
     request = gql("some query")
-    return await anilist_request(request)
+    async with AnilistClient() as client:
+        return await client.anilist_request(request)
 
 if __name__ == "__main__":
     sign_in_if_no_global()
@@ -41,7 +56,8 @@ if __name__ == "__main__":
 ```py
 async def do_something(user_id: str):
     request = gql("some query")
-    return await anilist_request(request, user_id=user_id)
+    async with AnilistClient(user_id=user_id) as client:
+        return await client.anilist_request(request)
 
 if __name__ == "__main__":
     my_user_id = "12345"
@@ -53,5 +69,6 @@ You can also choose to not use auth on requests with the `use_auth` parameter (d
 ```py
 async def do_something():
     request = gql("some query")
-    return await anilist_request(request, use_auth=False)
+    async with AnilistClient(use_auth=False) as client:
+        return await client.anilist_request(request)
 ```
