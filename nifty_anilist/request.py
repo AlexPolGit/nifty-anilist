@@ -20,8 +20,4 @@ async def anilist_request(query_request: GraphQLRequest, user_id: Optional[str] 
     client = create_client(user_id, use_auth)
 
     async with client as session:
-        res = await session.execute(query_request)
-        print(res)
-
-    async with client as session:
         return await run_request_with_retry(session.execute(query_request))
