@@ -1,9 +1,7 @@
 from typing import Any, Dict, Optional
-from gql import Client, GraphQLRequest
-from gql.transport.aiohttp import AIOHTTPTransport
+from gql import GraphQLRequest
 
-from nifty_anilist.utils.request_utils import create_request_headers, schema, run_request_with_retry
-from nifty_anilist.settings import anilist_settings
+from nifty_anilist.utils.request_utils import create_client, run_request_with_retry
 
 
 async def anilist_request(query_request: GraphQLRequest, user_id: Optional[str] = None, use_auth: bool = True) -> Dict[str, Any]:
@@ -19,12 +17,11 @@ async def anilist_request(query_request: GraphQLRequest, user_id: Optional[str] 
         result: Result of the query, as a dictionary.
     """
 
-    transport = AIOHTTPTransport(
-        url=anilist_settings.api_url,
-        headers=create_request_headers(user_id, use_auth)
-    )
+    client = create_client(user_id, use_auth)
 
-    client = Client(transport=transport, schema=schema())
+    async with client as session:
+        res = await session.execute(query_request)
+        print(res)
 
     async with client as session:
         return await run_request_with_retry(session.execute(query_request))

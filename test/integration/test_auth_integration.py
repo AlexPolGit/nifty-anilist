@@ -1,12 +1,10 @@
-from pathlib import Path
 from unittest.mock import patch
-import pytest
 
 from nifty_anilist.settings import TokenSavingMethod
 from nifty_anilist.auth import sign_in, get_auth_info, get_global_user, set_global_user, logout_global_user, remove_user
+from test.util.patches import patch_auth_dotenv_path
 
 
-DOTENV_PATH = "test/integration/.env.test"
 MOCK_USER_ID_1 = "1234"
 MOCK_USER_ID_2 = "5678"
 MOCK_AUTH_TOKEN_1 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiIyMTI0MiIsInN1YiI6IjEyMzQiLCJleHAiOjQ4OTEzODEyMDB9.mb7CoDSN220-Pj5aEKfM_EH1h0gNBpq0y7rEgBEchHE"
@@ -39,23 +37,11 @@ MOCK_AUTH_TOKEN_CONTENTS_2 = {
 
 class TestAuthenticationFunctions:
 
-    @pytest.fixture(scope="session", autouse=True)
-    def clear_env_file_after_tests(self):
-        env_path = Path(DOTENV_PATH)
-        yield
-
-        # Empty the .env file.
-        if env_path.exists():
-            # Overwrite with empty content.
-            env_path.write_text("")
-
-
-    def test_multi_user_workflow(self):
-        patch_dotenv_path = patch("nifty_anilist.auth.DOTENV_PATH", DOTENV_PATH)
+    def test_multi_user_workflow(self, patch_auth_dotenv_path):
         patch_token_saving_method = patch("nifty_anilist.utils.auth_utils.anilist_settings.token_saving_method", TokenSavingMethod.IN_MEMORY)
         patch_generate_new_token = patch("nifty_anilist.auth.generate_new_token", side_effect=[MOCK_AUTH_TOKEN_1, MOCK_AUTH_TOKEN_2, MOCK_AUTH_TOKEN_2])
         
-        with patch_dotenv_path, patch_token_saving_method, patch_generate_new_token:
+        with patch_auth_dotenv_path, patch_token_saving_method, patch_generate_new_token:
             # Test 1: Ensure you can get the auth info of a user either through the global user or directly.
             logout_global_user()
             assert get_global_user() == None
@@ -92,4 +78,3 @@ class TestAuthenticationFunctions:
 
             user_2_auth_info = sign_in()
             remove_user(user_2_auth_info.user_id)
-

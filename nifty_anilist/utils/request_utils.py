@@ -5,7 +5,9 @@ from http import HTTPStatus
 import asyncio
 from importlib.resources import files, as_file
 from aiohttp import ClientResponseError
+from gql import Client
 from gql.transport.exceptions import TransportServerError
+from gql.transport.aiohttp import AIOHTTPTransport
 
 from nifty_anilist.settings import anilist_settings
 from nifty_anilist.logging import anilist_logger as logger
@@ -24,6 +26,25 @@ def schema() -> str:
         with open(path, "r") as f:
             schema_string = f.read()
             return schema_string
+
+
+def create_client(user_id: Optional[str] = None, use_auth: bool = True) -> Client:
+    """Create a GraphQL client for Anilist requests.
+    
+    Args:
+        user_id: ID of the user to use for authentiation. Leave empty to use the global user.
+        use_auth: Whether to auth the auth header or not. Default is `True`.
+        
+    Returns:
+        client: GraphQL client for Anilist requests.
+    """
+    transport = AIOHTTPTransport(
+        url=anilist_settings.api_url,
+        headers=create_request_headers(user_id, use_auth)
+    )
+
+    return Client(transport=transport, schema=schema())
+
 
 def create_request_headers(user_id: Optional[str] = None, use_auth: bool = True) -> Dict[str, str]:
     """Create headers for an Anilist API request.
@@ -110,16 +131,16 @@ async def sleep_for_rate_limit(initial_delay: Optional[int], attempt: int, max_a
     if (isinstance(error, RateLimitException)):
         # If the initial delay was provided, use it and increment by 5 seconds every time.
         if initial_delay:
-            delay = initial_delay + (attempt * 5)
+            delay = initial_delay if attempt == 1 else (attempt * 2)
         # Otherwise wait just over 1 minute and increment by 5 seconds every time.
         else:
-            delay = 61 + (attempt * 5)
+            delay = 61 if attempt == 1 else (attempt * 2)
 
     # Expect "TransportServerError" to be thrown when we get rate limited by the Anilist API.
     else:
         # If the initial delay was provided, use it and increment by 5 seconds every time.
         if initial_delay:
-            delay = initial_delay + (attempt * 5)
+            delay = initial_delay if attempt == 1 else (attempt * 2)
         # Otherise try to retrieve the recommended delay from response headers.
         else:
             base_error = error.__cause__
