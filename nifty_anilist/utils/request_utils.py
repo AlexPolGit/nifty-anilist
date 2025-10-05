@@ -9,9 +9,9 @@ from gql.transport.exceptions import TransportServerError
 
 from nifty_anilist.settings import anilist_settings
 from nifty_anilist.logging import anilist_logger as logger
-from nifty_anilist.auth import get_auth_info
 
-def schema() -> str:
+
+def get_anilist_schema() -> str:
     """Get the Anilist API GraphQL schema.
     Will get the schema from local files.
     
@@ -25,23 +25,6 @@ def schema() -> str:
             schema_string = f.read()
             return schema_string
 
-def create_request_headers(user_id: Optional[str] = None, use_auth: bool = True) -> Dict[str, str]:
-    """Create headers for an Anilist API request.
-    
-    Args:
-        user_id: ID of the user to use for authentiation. Leave empty to use the global user.
-        use_auth: Whether to auth the auth header or not. Default is `True`.
-
-    Returns:
-        headers: Appropriate headers for the API request based on the inputs.
-    """
-    headers: Dict[str, str] = {}
-
-    if use_auth:
-        auth_info = get_auth_info(user_id)
-        headers["Authorization"] = f"Bearer {auth_info.token}"
-
-    return headers
 
 class RateLimitException(Exception):
     """Custom error to be thrown when we hit our internal rate limit."""
@@ -110,16 +93,16 @@ async def sleep_for_rate_limit(initial_delay: Optional[int], attempt: int, max_a
     if (isinstance(error, RateLimitException)):
         # If the initial delay was provided, use it and increment by 5 seconds every time.
         if initial_delay:
-            delay = initial_delay + (attempt * 5)
+            delay = initial_delay if attempt == 1 else (attempt * 2)
         # Otherwise wait just over 1 minute and increment by 5 seconds every time.
         else:
-            delay = 69 + (attempt * 5)
+            delay = 69 if attempt == 1 else (attempt * 2)
 
     # Expect "TransportServerError" to be thrown when we get rate limited by the Anilist API.
     else:
         # If the initial delay was provided, use it and increment by 5 seconds every time.
         if initial_delay:
-            delay = initial_delay + (attempt * 5)
+            delay = initial_delay if attempt == 1 else (attempt * 2)
         # Otherise try to retrieve the recommended delay from response headers.
         else:
             base_error = error.__cause__

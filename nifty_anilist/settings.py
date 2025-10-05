@@ -67,10 +67,10 @@ class AnilistSettings(BaseSettings):
 
     # --- Testing ---
     test_user_id: Optional[str] = None
-    """User ID for test user that will be used in integration tests. \n\n**Note:** Only used for development."""
+    """User ID for test user that will be used in integration tests. \n\n**Note:** Only used for development/testing."""
     
     test_user_auth_token:  Optional[str] = None
-    """Auth token for test user that will be used in integration tests. \n\n**Note:** Only used for development."""
+    """Auth token for test user that will be used in integration tests. \n\n**Note:** Only used for development/testing.."""
 
 
 anilist_settings = AnilistSettings() # type: ignore

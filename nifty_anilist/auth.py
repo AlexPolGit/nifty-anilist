@@ -1,7 +1,7 @@
 from typing import Optional
 from dotenv import get_key, set_key, unset_key
 
-from nifty_anilist.utils.auth_utils import get_token, save_token, delete_token, generate_new_token, get_user_from_token, is_token_expired
+from nifty_anilist.utils.auth_utils import UserId, get_token, save_token, delete_token, generate_new_token, get_user_from_token, is_token_expired
 from nifty_anilist.logging import anilist_logger as logger
 
 
@@ -10,10 +10,10 @@ GLOBAL_USER_ENV_VAR = "ANILIST_CURRENT_USER"
 
 
 class AuthInfo:
-    user_id: str
+    user_id: UserId
     token: str
 
-    def __init__(self, user_id: str, token: str) -> None:
+    def __init__(self, user_id: UserId, token: str) -> None:
         self.user_id = user_id
         self.token = token
 
@@ -43,7 +43,7 @@ def sign_in(set_global: bool = False) -> AuthInfo:
     return AuthInfo(user_id, auth_token)
 
 
-def sign_in_if_no_global() -> str:
+def sign_in_if_no_global() -> UserId:
     """Manually sign into Anilist if there is currently no global user.
     Will do nothing if there is already a global user.
     Run this near the start of your program to setup a global user (if you plan to use one).
@@ -58,7 +58,7 @@ def sign_in_if_no_global() -> str:
         return global_user
 
 
-def get_auth_info(user_id: Optional[str] = None) -> AuthInfo:
+def get_auth_info(user_id: Optional[UserId] = None) -> AuthInfo:
     """Get auth info for Anilist requests. Required for any write operations.
     This token lasts 1 year and will be securely stored on your machine.
     If the token does not exist on your machine or is expired, this function will generate a new one.
@@ -92,7 +92,7 @@ def get_auth_info(user_id: Optional[str] = None) -> AuthInfo:
     return AuthInfo(user_id, auth_token)
 
 
-def get_global_user() -> Optional[str]:
+def get_global_user() -> Optional[UserId]:
     """Get the current global user('s ID).
     
     Returns:
@@ -101,7 +101,7 @@ def get_global_user() -> Optional[str]:
     return get_key(DOTENV_PATH, GLOBAL_USER_ENV_VAR)
 
 
-def set_global_user(user_id: str) -> AuthInfo:
+def set_global_user(user_id: UserId) -> AuthInfo:
     """Set the global user.
     \n**Note:** This does *not* remove the previous user's auth token from your machine.
     
@@ -111,7 +111,7 @@ def set_global_user(user_id: str) -> AuthInfo:
     Returns:
         auth: Auth info of this user.
     """
-    set_key(DOTENV_PATH, GLOBAL_USER_ENV_VAR, user_id)
+    set_key(DOTENV_PATH, GLOBAL_USER_ENV_VAR, str(user_id))
     return get_auth_info(user_id)
 
 
@@ -122,7 +122,7 @@ def logout_global_user():
     unset_key(DOTENV_PATH, GLOBAL_USER_ENV_VAR)
 
 
-def remove_user(user_to_remove: Optional[str] = None) -> str:
+def remove_user(user_to_remove: Optional[UserId] = None) -> UserId:
     """Removes a user. This will remove their auth token from your machine.
     
     Args:

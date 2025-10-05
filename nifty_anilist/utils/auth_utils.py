@@ -1,4 +1,4 @@
-from typing import Optional, Dict
+from typing import Optional, Dict, Union
 import time
 import httpx
 import urllib.parse as urlparse
@@ -14,11 +14,12 @@ from nifty_anilist.settings import anilist_settings, TokenSavingMethod
 
 KEYRING_SERVICE_NAME = "nifty-anilist-python"
 
+UserId = Union[str, int]
 
-IN_MEMORY_TOKEN_STORAGE: Dict[str, str] = {}
+IN_MEMORY_TOKEN_STORAGE: Dict[UserId, str] = {}
 
 
-def save_token(user_id: str, token: str) -> None:
+def save_token(user_id: UserId, token: str) -> None:
     """Save an auth token locally.
     
     Args:
@@ -26,35 +27,35 @@ def save_token(user_id: str, token: str) -> None:
         token: The value of the token to save.
     """
     if (anilist_settings.token_saving_method == TokenSavingMethod.KEYRING):
-        keyring.set_password(KEYRING_SERVICE_NAME, user_id, token)
+        keyring.set_password(KEYRING_SERVICE_NAME, str(user_id), token)
     elif (anilist_settings.token_saving_method == TokenSavingMethod.IN_MEMORY):
         IN_MEMORY_TOKEN_STORAGE[user_id] = token
     else:
         raise ValueError("Unknown token storage method.")
 
 
-def get_token(user_id: str) -> Optional[str]:
+def get_token(user_id: UserId) -> Optional[str]:
     """Get the auth token stored locally for a user.
     
     Args:
         user_id: ID of the user to get the token for.
     """
     if (anilist_settings.token_saving_method == TokenSavingMethod.KEYRING):
-        return keyring.get_password(KEYRING_SERVICE_NAME, user_id)
+        return keyring.get_password(KEYRING_SERVICE_NAME, str(user_id))
     elif (anilist_settings.token_saving_method == TokenSavingMethod.IN_MEMORY):
         return IN_MEMORY_TOKEN_STORAGE[user_id]
     else:
         raise ValueError("Unknown token storage method.")
 
 
-def delete_token(user_id: str) -> None:
+def delete_token(user_id: UserId) -> None:
     """Delete a local auth token.
     
     Args:
         user_id: ID of the user to delete the token for.
     """
     if (anilist_settings.token_saving_method == TokenSavingMethod.KEYRING):
-        keyring.delete_password(KEYRING_SERVICE_NAME, user_id)
+        keyring.delete_password(KEYRING_SERVICE_NAME, str(user_id))
     elif (anilist_settings.token_saving_method == TokenSavingMethod.IN_MEMORY):
         try:
             IN_MEMORY_TOKEN_STORAGE.pop(user_id)
@@ -102,7 +103,7 @@ def generate_new_token() -> str:
     return data['access_token']
 
 
-def get_user_from_token(token: str) -> str:
+def get_user_from_token(token: str) -> UserId:
     """Get the Anilist user ID from a given (JWT) auth token.
     
     Args:
