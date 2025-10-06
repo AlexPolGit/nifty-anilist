@@ -61,9 +61,11 @@ This library will store Anilist auth token(s) locally in one of two ways (custom
 2. In-memory (lost when you restart your program): `IN_MEMORY`
 
 #### Using Auth
-In order to get an auth token for the first time, you can use the `sign_in_if_no_global()` function from [auth.py](./nifty_anilist/auth.py). After the first time, these details will be stored locally and added to your Anilist requests automatically.
+In order to get an auth token for the first time, you have 2 options:
+1. Use the `sign_in_if_no_global()` function from [auth.py](./nifty_anilist/auth.py). After the first time, these details will be stored locally and added to your Anilist requests automatically.
+2. If you already have an auth token from some other process, you can "sign in" with the `sign_in_with_token()` function from [auth.py](./nifty_anilist/auth.py). By default this function will set the user of this token as the global one, but this can be disabled with the `set_global` parameter.
 
-**Note:** The sign-in function currently opens an instance of Google Chrome to the Anilist login page, from which your auth code will be automatically extracted. There will be more ways to do sign-in later.
+**Note:** The sign-in function will open an instance of the browser defined by `ANILIST_AUTH_CODE_BROWSER` to the Anilist login page, from which your auth code will be automatically extracted. Chrome is the default.
 
 There are two ways that auth headers can be added to your requests:
 1. Using a global user ID stored in the `.env` file: The ID is stored as `ANILIST_CURRENT_USER`. This is the user ID that will be used to retrieve the token from the storage method(s) above. When making requests with the client's `anilist_request()`, you can ignore the optional `user_id` parameter to use this approach. Example:
@@ -87,11 +89,12 @@ async def do_something(user_id: str):
 
 if __name__ == "__main__":
     my_user_id = "12345"
+    sign_in_with_token(my_user_id)
     data = asyncio.run(do_something(user_id=my_user_id))
     print(data)
 ```
 
-You can also choose to not use auth on requests with the `use_auth` parameter (default is `True`):
+**Note:** You can also choose to not use auth on requests with the `use_auth` parameter (default is `True`). In this case you don't need to sign it at all. Example:
 ```py
 async def do_something():
     query = # some query

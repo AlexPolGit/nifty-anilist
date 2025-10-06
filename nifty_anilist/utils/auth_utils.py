@@ -6,10 +6,11 @@ import keyring
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.remote.webdriver import WebDriver
 import jwt
 
 from nifty_anilist.logging import anilist_logger as logger
-from nifty_anilist.settings import anilist_settings, TokenSavingMethod
+from nifty_anilist.settings import anilist_settings, TokenSavingMethod, WebBrowser
 
 
 KEYRING_SERVICE_NAME = "nifty-anilist-python"
@@ -141,14 +142,13 @@ def is_token_expired(token: str) -> bool:
 
 
 def get_auth_code_from_browser() -> str:
-    """Uses a real Chrome browser to allow the user to manually sign into Anilist and then automatically retrieves their auth code.
-    Might support other browsers later, idk.
+    """Uses a real browser to allow the user to manually sign into Anilist and then automatically retrieves their auth code.
         
     Returns:
         auth_code: Short-lived Anilist auth code that was grabbed from the browser.
     """
-    # Setup Chrome.
-    driver = webdriver.Chrome()
+    # Setup web browser.
+    driver = get_webdriver()
 
     # Setup AniList OAuth URL.
     auth_url = f"{anilist_settings.auth_url}?" \
@@ -156,7 +156,7 @@ def get_auth_code_from_browser() -> str:
         f"redirect_uri={anilist_settings.client_redirect_url}&" \
         f"response_type=code"
     
-    logger.info(f"Opening auth page in Chrome: {auth_url}")
+    logger.info(f"Opening auth page in {anilist_settings.auth_code_browser.title()}: {auth_url}")
     
     # Open the page.
     driver.get(auth_url)
@@ -176,6 +176,24 @@ def get_auth_code_from_browser() -> str:
         raise RuntimeError("Failed to find an auth code from redirect URL.")
 
     return auth_code
+
+
+def get_webdriver() -> WebDriver:
+    """Get appropriate web driver based on the user's prefered browser."""
+    match anilist_settings.auth_code_browser:
+        case WebBrowser.CHROME:
+            return webdriver.Chrome()
+        case WebBrowser.FIREFOX:
+            return webdriver.Firefox()
+        case WebBrowser.EDGE:
+            return webdriver.Edge()
+        case WebBrowser.IE:
+            return webdriver.Ie()
+        case WebBrowser.SAFARI:
+            return webdriver.Safari()
+        case _:
+            logger.warning("Default browser was invalid, using Chrome as a backup.")
+            return webdriver.Chrome()
 
 
 def open_credential_manager():

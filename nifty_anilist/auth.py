@@ -21,15 +21,47 @@ def sign_in(set_global: bool = False) -> AuthInfo:
     """Manually sign into Anilist.
 
     Args:
-        set_global: If `True`, the user signed which signed will be set as the global user.
+        set_global: If `True`, the signed-in user will be set as the global user.
 
     Returns:
         auth_info: Auth info for the user, including an auth token that can be used in Anilist requests.
     """
 
-    # Generate auth token from this auth code.
+    # Manually generate a new auth token.
     auth_token = generate_new_token()
 
+    return sign_in_with_token(auth_token, set_global)
+
+
+def sign_in_if_no_global() -> AuthInfo:
+    """Manually sign into Anilist if there is currently no global user.
+    Will do nothing if there is already a global user.
+    Run this near the start of your program to setup a global user (if you plan to use one).
+    
+    Returns:
+        auth_info: Auth info for the global user.
+    """
+    global_user = get_global_user()
+    if global_user is None:
+        return sign_in(set_global=True)
+    else:
+        token = get_token(global_user)
+        if token:
+            return AuthInfo(global_user, token)
+        else:
+            raise ValueError(f"No auth token was found for user {global_user}!")
+
+
+def sign_in_with_token(auth_token: str, set_global: bool = True) -> AuthInfo:
+    """Skip manually signing into Anilist if you already have an auth token and save it directly.
+    
+    Args:
+        auth_token: JWT auth token from Anilist.
+        set_global: If `True`, the signed-in user will be set as the global user.
+
+    Returns:
+        auth_info: Auth info for the user.
+    """
     # Get the user ID of the user to whom the auth token belongs.
     user_id = get_user_from_token(auth_token)
 
@@ -41,21 +73,6 @@ def sign_in(set_global: bool = False) -> AuthInfo:
         set_global_user(user_id)
 
     return AuthInfo(user_id, auth_token)
-
-
-def sign_in_if_no_global() -> UserId:
-    """Manually sign into Anilist if there is currently no global user.
-    Will do nothing if there is already a global user.
-    Run this near the start of your program to setup a global user (if you plan to use one).
-    
-    Returns:
-        user_id: ID of the global user.
-    """
-    global_user = get_global_user()
-    if global_user is None:
-        return sign_in(set_global=True).user_id
-    else:
-        return global_user
 
 
 def get_auth_info(user_id: Optional[UserId] = None) -> AuthInfo:

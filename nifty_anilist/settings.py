@@ -10,6 +10,16 @@ class TokenSavingMethod(StrEnum):
     IN_MEMORY = "IN_MEMORY"
 
 
+class WebBrowser(StrEnum):
+    """Enum for supported browsers."""
+
+    CHROME = "CHROME"
+    FIREFOX = "FIREFOX"
+    EDGE = "EDGE"
+    IE = "IE"
+    SAFARI = "SAFARI"
+
+
 class AnilistSettings(BaseSettings):
     """Settings for Anilist-related things.
     Will be populated from environment variables or the local `.env` file.
@@ -57,11 +67,14 @@ class AnilistSettings(BaseSettings):
     """Client redirect URL from Anilist client.
     Reference: https://docs.anilist.co/guide/auth/#creating-an-application and https://anilist.co/settings/developer"""
 
+    auth_code_browser: WebBrowser = WebBrowser.CHROME
+    """Browser to use when getting auth code from browser. Possbile values: \"CHROME\", \"FIREFOX\", \"EDGE\", \"IE\", \"SAFARI\"."""
+
     auth_code_brower_timeout_seconds: int = 300
     """Seconds to wait before timing out when getting auth code from browser."""
 
     token_saving_method: TokenSavingMethod = TokenSavingMethod.KEYRING
-    """What method to use for storing use auth tokens on the local machine."""
+    """What method to use for storing use auth tokens on the local machine. Possbile values: \"KEYRING\", \"IN_MEMORY\"."""
 
 
     # --- Testing ---
