@@ -9,7 +9,8 @@ from nifty_anilist.settings import anilist_settings
 from nifty_anilist.anilist_client import AnilistClient
 from nifty_anilist.client.custom_queries import GraphQLField
 
-class TestRequestFunctions():
+
+class TestRequestFunctions:
 
     @pytest.fixture
     def mock_gql_request(self):
@@ -22,20 +23,22 @@ class TestRequestFunctions():
         if anilist_settings.test_user_auth_token is None:
             raise ValueError("Test user auth token not set in settings.")
 
-        with patch("nifty_anilist.auth.get_auth_info", returns=AuthInfo(anilist_settings.test_user_id, anilist_settings.test_user_auth_token)) as user_info:
+        with patch(
+            "nifty_anilist.auth.get_auth_info",
+            returns=AuthInfo(
+                anilist_settings.test_user_id, anilist_settings.test_user_auth_token
+            ),
+        ) as user_info:
             self.user_info = user_info
             yield
-
 
     @pytest.mark.asyncio
     async def test_simple_anilist_request(self):
         """Simple test to get a user's avatar."""
 
         with self.user_info:
-            query = Query.user(name="robert").fields( # Hi Robert!
-                UserFields.avatar().fields(
-                    UserAvatarFields.large
-                )
+            query = Query.user(name="robert").fields(  # Hi Robert!
+                UserFields.avatar().fields(UserAvatarFields.large)
             )
 
             async with AnilistClient() as client:

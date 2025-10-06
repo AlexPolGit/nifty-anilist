@@ -176,7 +176,7 @@ class ActivityLikeNotificationFields(GraphQLField):
         self,
         *subfields: Union[
             ActivityLikeNotificationGraphQLField, "ActivityUnionUnion", "UserFields"
-        ]
+        ],
     ) -> "ActivityLikeNotificationFields":
         """Subfields should come from the ActivityLikeNotificationFields class"""
         self._subfields.extend(subfields)
@@ -216,7 +216,7 @@ class ActivityMentionNotificationFields(GraphQLField):
         self,
         *subfields: Union[
             ActivityMentionNotificationGraphQLField, "ActivityUnionUnion", "UserFields"
-        ]
+        ],
     ) -> "ActivityMentionNotificationFields":
         """Subfields should come from the ActivityMentionNotificationFields class"""
         self._subfields.extend(subfields)
@@ -261,7 +261,7 @@ class ActivityMessageNotificationFields(GraphQLField):
             ActivityMessageNotificationGraphQLField,
             "MessageActivityFields",
             "UserFields",
-        ]
+        ],
     ) -> "ActivityMessageNotificationFields":
         """Subfields should come from the ActivityMessageNotificationFields class"""
         self._subfields.extend(subfields)
@@ -342,7 +342,7 @@ class ActivityReplyLikeNotificationFields(GraphQLField):
             ActivityReplyLikeNotificationGraphQLField,
             "ActivityUnionUnion",
             "UserFields",
-        ]
+        ],
     ) -> "ActivityReplyLikeNotificationFields":
         """Subfields should come from the ActivityReplyLikeNotificationFields class"""
         self._subfields.extend(subfields)
@@ -382,7 +382,7 @@ class ActivityReplyNotificationFields(GraphQLField):
         self,
         *subfields: Union[
             ActivityReplyNotificationGraphQLField, "ActivityUnionUnion", "UserFields"
-        ]
+        ],
     ) -> "ActivityReplyNotificationFields":
         """Subfields should come from the ActivityReplyNotificationFields class"""
         self._subfields.extend(subfields)
@@ -424,7 +424,7 @@ class ActivityReplySubscribedNotificationFields(GraphQLField):
             ActivityReplySubscribedNotificationGraphQLField,
             "ActivityUnionUnion",
             "UserFields",
-        ]
+        ],
     ) -> "ActivityReplySubscribedNotificationFields":
         """Subfields should come from the ActivityReplySubscribedNotificationFields class"""
         self._subfields.extend(subfields)
@@ -531,7 +531,7 @@ class AiringScheduleConnectionFields(GraphQLField):
             "AiringScheduleEdgeFields",
             "AiringScheduleFields",
             "PageInfoFields",
-        ]
+        ],
     ) -> "AiringScheduleConnectionFields":
         """Subfields should come from the AiringScheduleConnectionFields class"""
         self._subfields.extend(subfields)
@@ -624,7 +624,7 @@ class CharacterFields(GraphQLField):
         type: Optional[MediaType] = None,
         on_list: Optional[bool] = None,
         page: Optional[int] = None,
-        per_page: Optional[int] = None
+        per_page: Optional[int] = None,
     ) -> "MediaConnectionFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "sort": {"type": "MediaSort", "value": sort},
@@ -650,7 +650,7 @@ class CharacterFields(GraphQLField):
             "CharacterNameFields",
             "FuzzyDateFields",
             "MediaConnectionFields",
-        ]
+        ],
     ) -> "CharacterFields":
         """Subfields should come from the CharacterFields class"""
         self._subfields.extend(subfields)
@@ -681,7 +681,7 @@ class CharacterConnectionFields(GraphQLField):
             "CharacterEdgeFields",
             "CharacterFields",
             "PageInfoFields",
-        ]
+        ],
     ) -> "CharacterConnectionFields":
         """Subfields should come from the CharacterConnectionFields class"""
         self._subfields.extend(subfields)
@@ -706,7 +706,7 @@ class CharacterEdgeFields(GraphQLField):
         cls,
         *,
         language: Optional[StaffLanguage] = None,
-        sort: Optional[StaffSort] = None
+        sort: Optional[StaffSort] = None,
     ) -> "StaffFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "language": {"type": "StaffLanguage", "value": language},
@@ -722,7 +722,7 @@ class CharacterEdgeFields(GraphQLField):
         cls,
         *,
         language: Optional[StaffLanguage] = None,
-        sort: Optional[StaffSort] = None
+        sort: Optional[StaffSort] = None,
     ) -> "StaffRoleTypeFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "language": {"type": "StaffLanguage", "value": language},
@@ -749,7 +749,7 @@ class CharacterEdgeFields(GraphQLField):
             "MediaFields",
             "StaffFields",
             "StaffRoleTypeFields",
-        ]
+        ],
     ) -> "CharacterEdgeFields":
         """Subfields should come from the CharacterEdgeFields class"""
         self._subfields.extend(subfields)
@@ -885,7 +885,7 @@ class FavouritesFields(GraphQLField):
             "MediaConnectionFields",
             "StaffConnectionFields",
             "StudioConnectionFields",
-        ]
+        ],
     ) -> "FavouritesFields":
         """Subfields should come from the FavouritesFields class"""
         self._subfields.extend(subfields)
@@ -1007,7 +1007,7 @@ class ListActivityFields(GraphQLField):
         self,
         *subfields: Union[
             ListActivityGraphQLField, "ActivityReplyFields", "MediaFields", "UserFields"
-        ]
+        ],
     ) -> "ListActivityFields":
         """Subfields should come from the ListActivityFields class"""
         self._subfields.extend(subfields)
@@ -1148,7 +1148,7 @@ class MediaFields(GraphQLField):
         sort: Optional[CharacterSort] = None,
         role: Optional[CharacterRole] = None,
         page: Optional[int] = None,
-        per_page: Optional[int] = None
+        per_page: Optional[int] = None,
     ) -> "CharacterConnectionFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "sort": {"type": "CharacterSort", "value": sort},
@@ -1167,7 +1167,7 @@ class MediaFields(GraphQLField):
         *,
         sort: Optional[StaffSort] = None,
         page: Optional[int] = None,
-        per_page: Optional[int] = None
+        per_page: Optional[int] = None,
     ) -> "StaffConnectionFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "sort": {"type": "StaffSort", "value": sort},
@@ -1206,7 +1206,7 @@ class MediaFields(GraphQLField):
         *,
         not_yet_aired: Optional[bool] = None,
         page: Optional[int] = None,
-        per_page: Optional[int] = None
+        per_page: Optional[int] = None,
     ) -> "AiringScheduleConnectionFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "notYetAired": {"type": "Boolean", "value": not_yet_aired},
@@ -1227,7 +1227,7 @@ class MediaFields(GraphQLField):
         sort: Optional[MediaTrendSort] = None,
         releasing: Optional[bool] = None,
         page: Optional[int] = None,
-        per_page: Optional[int] = None
+        per_page: Optional[int] = None,
     ) -> "MediaTrendConnectionFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "sort": {"type": "MediaTrendSort", "value": sort},
@@ -1263,7 +1263,7 @@ class MediaFields(GraphQLField):
         limit: Optional[int] = None,
         sort: Optional[ReviewSort] = None,
         page: Optional[int] = None,
-        per_page: Optional[int] = None
+        per_page: Optional[int] = None,
     ) -> "ReviewConnectionFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "limit": {"type": "Int", "value": limit},
@@ -1282,7 +1282,7 @@ class MediaFields(GraphQLField):
         *,
         sort: Optional[RecommendationSort] = None,
         page: Optional[int] = None,
-        per_page: Optional[int] = None
+        per_page: Optional[int] = None,
     ) -> "RecommendationConnectionFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "sort": {"type": "RecommendationSort", "value": sort},
@@ -1333,7 +1333,7 @@ class MediaFields(GraphQLField):
             "ReviewConnectionFields",
             "StaffConnectionFields",
             "StudioConnectionFields",
-        ]
+        ],
     ) -> "MediaFields":
         """Subfields should come from the MediaFields class"""
         self._subfields.extend(subfields)
@@ -1364,7 +1364,7 @@ class MediaConnectionFields(GraphQLField):
             "MediaEdgeFields",
             "MediaFields",
             "PageInfoFields",
-        ]
+        ],
     ) -> "MediaConnectionFields":
         """Subfields should come from the MediaConnectionFields class"""
         self._subfields.extend(subfields)
@@ -1497,7 +1497,7 @@ class MediaEdgeFields(GraphQLField):
         cls,
         *,
         language: Optional[StaffLanguage] = None,
-        sort: Optional[StaffSort] = None
+        sort: Optional[StaffSort] = None,
     ) -> "StaffFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "language": {"type": "StaffLanguage", "value": language},
@@ -1513,7 +1513,7 @@ class MediaEdgeFields(GraphQLField):
         cls,
         *,
         language: Optional[StaffLanguage] = None,
-        sort: Optional[StaffSort] = None
+        sort: Optional[StaffSort] = None,
     ) -> "StaffRoleTypeFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "language": {"type": "StaffLanguage", "value": language},
@@ -1534,7 +1534,7 @@ class MediaEdgeFields(GraphQLField):
             "MediaFields",
             "StaffFields",
             "StaffRoleTypeFields",
-        ]
+        ],
     ) -> "MediaEdgeFields":
         """Subfields should come from the MediaEdgeFields class"""
         self._subfields.extend(subfields)
@@ -1636,7 +1636,7 @@ class MediaListFields(GraphQLField):
         self,
         *subfields: Union[
             MediaListGraphQLField, "FuzzyDateFields", "MediaFields", "UserFields"
-        ]
+        ],
     ) -> "MediaListFields":
         """Subfields should come from the MediaListFields class"""
         self._subfields.extend(subfields)
@@ -1687,7 +1687,7 @@ class MediaListCollectionFields(GraphQLField):
             "MediaListFields",
             "MediaListGroupFields",
             "UserFields",
-        ]
+        ],
     ) -> "MediaListCollectionFields":
         """Subfields should come from the MediaListCollectionFields class"""
         self._subfields.extend(subfields)
@@ -1750,7 +1750,7 @@ class MediaListOptionsFields(GraphQLField):
 
     def fields(
         self,
-        *subfields: Union[MediaListOptionsGraphQLField, "MediaListTypeOptionsFields"]
+        *subfields: Union[MediaListOptionsGraphQLField, "MediaListTypeOptionsFields"],
     ) -> "MediaListOptionsFields":
         """Subfields should come from the MediaListOptionsFields class"""
         self._subfields.extend(subfields)
@@ -1870,7 +1870,7 @@ class MediaStatsFields(GraphQLField):
             "AiringProgressionFields",
             "ScoreDistributionFields",
             "StatusDistributionFields",
-        ]
+        ],
     ) -> "MediaStatsFields":
         """Subfields should come from the MediaStatsFields class"""
         self._subfields.extend(subfields)
@@ -2032,7 +2032,7 @@ class MediaTrendConnectionFields(GraphQLField):
             "MediaTrendEdgeFields",
             "MediaTrendFields",
             "PageInfoFields",
-        ]
+        ],
     ) -> "MediaTrendConnectionFields":
         """Subfields should come from the MediaTrendConnectionFields class"""
         self._subfields.extend(subfields)
@@ -2115,7 +2115,7 @@ class MessageActivityFields(GraphQLField):
         self,
         *subfields: Union[
             MessageActivityGraphQLField, "ActivityReplyFields", "UserFields"
-        ]
+        ],
     ) -> "MessageActivityFields":
         """Subfields should come from the MessageActivityFields class"""
         self._subfields.extend(subfields)
@@ -2157,7 +2157,7 @@ class PageFields(GraphQLField):
         name: Optional[str] = None,
         is_moderator: Optional[bool] = None,
         search: Optional[str] = None,
-        sort: Optional[UserSort] = None
+        sort: Optional[UserSort] = None,
     ) -> "UserFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "id": {"type": "Int", "value": id},
@@ -2243,7 +2243,7 @@ class PageFields(GraphQLField):
         popularity_greater: Optional[int] = None,
         popularity_lesser: Optional[int] = None,
         source_in: Optional[MediaSource] = None,
-        sort: Optional[MediaSort] = None
+        sort: Optional[MediaSort] = None,
     ) -> "MediaFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "id": {"type": "Int", "value": id},
@@ -2331,7 +2331,7 @@ class PageFields(GraphQLField):
         id_not: Optional[int] = None,
         id_in: Optional[int] = None,
         id_not_in: Optional[int] = None,
-        sort: Optional[CharacterSort] = None
+        sort: Optional[CharacterSort] = None,
     ) -> "CharacterFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "id": {"type": "Int", "value": id},
@@ -2357,7 +2357,7 @@ class PageFields(GraphQLField):
         id_not: Optional[int] = None,
         id_in: Optional[int] = None,
         id_not_in: Optional[int] = None,
-        sort: Optional[StaffSort] = None
+        sort: Optional[StaffSort] = None,
     ) -> "StaffFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "id": {"type": "Int", "value": id},
@@ -2382,7 +2382,7 @@ class PageFields(GraphQLField):
         id_not: Optional[int] = None,
         id_in: Optional[int] = None,
         id_not_in: Optional[int] = None,
-        sort: Optional[StudioSort] = None
+        sort: Optional[StudioSort] = None,
     ) -> "StudioFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "id": {"type": "Int", "value": id},
@@ -2425,7 +2425,7 @@ class PageFields(GraphQLField):
         completed_at_greater: Optional[Any] = None,
         completed_at_lesser: Optional[Any] = None,
         completed_at_like: Optional[str] = None,
-        sort: Optional[MediaListSort] = None
+        sort: Optional[MediaListSort] = None,
     ) -> "MediaListFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "id": {"type": "Int", "value": id},
@@ -2487,7 +2487,7 @@ class PageFields(GraphQLField):
         episode_lesser: Optional[int] = None,
         airing_at_greater: Optional[int] = None,
         airing_at_lesser: Optional[int] = None,
-        sort: Optional[AiringSort] = None
+        sort: Optional[AiringSort] = None,
     ) -> "AiringScheduleFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "id": {"type": "Int", "value": id},
@@ -2543,7 +2543,7 @@ class PageFields(GraphQLField):
         episode_greater: Optional[int] = None,
         episode_lesser: Optional[int] = None,
         episode_not: Optional[int] = None,
-        sort: Optional[MediaTrendSort] = None
+        sort: Optional[MediaTrendSort] = None,
     ) -> "MediaTrendFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "mediaId": {"type": "Int", "value": media_id},
@@ -2583,7 +2583,7 @@ class PageFields(GraphQLField):
         *,
         type: Optional[NotificationType] = None,
         reset_notification_count: Optional[bool] = None,
-        type_in: Optional[NotificationType] = None
+        type_in: Optional[NotificationType] = None,
     ) -> "NotificationUnionUnion":
         arguments: Dict[str, Dict[str, Any]] = {
             "type": {"type": "NotificationType", "value": type},
@@ -2654,7 +2654,7 @@ class PageFields(GraphQLField):
         type_not_in: Optional[ActivityType] = None,
         created_at_greater: Optional[int] = None,
         created_at_lesser: Optional[int] = None,
-        sort: Optional[ActivitySort] = None
+        sort: Optional[ActivitySort] = None,
     ) -> "ActivityUnionUnion":
         arguments: Dict[str, Dict[str, Any]] = {
             "id": {"type": "Int", "value": id},
@@ -2718,7 +2718,7 @@ class PageFields(GraphQLField):
         media_category_id: Optional[int] = None,
         search: Optional[str] = None,
         id_in: Optional[int] = None,
-        sort: Optional[ThreadSort] = None
+        sort: Optional[ThreadSort] = None,
     ) -> "ThreadFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "id": {"type": "Int", "value": id},
@@ -2743,7 +2743,7 @@ class PageFields(GraphQLField):
         id: Optional[int] = None,
         thread_id: Optional[int] = None,
         user_id: Optional[int] = None,
-        sort: Optional[ThreadCommentSort] = None
+        sort: Optional[ThreadCommentSort] = None,
     ) -> "ThreadCommentFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "id": {"type": "Int", "value": id},
@@ -2764,7 +2764,7 @@ class PageFields(GraphQLField):
         media_id: Optional[int] = None,
         user_id: Optional[int] = None,
         media_type: Optional[MediaType] = None,
-        sort: Optional[ReviewSort] = None
+        sort: Optional[ReviewSort] = None,
     ) -> "ReviewFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "id": {"type": "Int", "value": id},
@@ -2790,7 +2790,7 @@ class PageFields(GraphQLField):
         on_list: Optional[bool] = None,
         rating_greater: Optional[int] = None,
         rating_lesser: Optional[int] = None,
-        sort: Optional[RecommendationSort] = None
+        sort: Optional[RecommendationSort] = None,
     ) -> "RecommendationFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "id": {"type": "Int", "value": id},
@@ -2841,7 +2841,7 @@ class PageFields(GraphQLField):
             "ThreadCommentFields",
             "ThreadFields",
             "UserFields",
-        ]
+        ],
     ) -> "PageFields":
         """Subfields should come from the PageFields class"""
         self._subfields.extend(subfields)
@@ -2931,7 +2931,7 @@ class RecommendationConnectionFields(GraphQLField):
             "PageInfoFields",
             "RecommendationEdgeFields",
             "RecommendationFields",
-        ]
+        ],
     ) -> "RecommendationConnectionFields":
         """Subfields should come from the RecommendationConnectionFields class"""
         self._subfields.extend(subfields)
@@ -2982,7 +2982,7 @@ class RelatedMediaAdditionNotificationFields(GraphQLField):
 
     def fields(
         self,
-        *subfields: Union[RelatedMediaAdditionNotificationGraphQLField, "MediaFields"]
+        *subfields: Union[RelatedMediaAdditionNotificationGraphQLField, "MediaFields"],
     ) -> "RelatedMediaAdditionNotificationFields":
         """Subfields should come from the RelatedMediaAdditionNotificationFields class"""
         self._subfields.extend(subfields)
@@ -3059,7 +3059,7 @@ class ReviewConnectionFields(GraphQLField):
             "PageInfoFields",
             "ReviewEdgeFields",
             "ReviewFields",
-        ]
+        ],
     ) -> "ReviewConnectionFields":
         """Subfields should come from the ReviewConnectionFields class"""
         self._subfields.extend(subfields)
@@ -3110,7 +3110,7 @@ class SiteStatisticsFields(GraphQLField):
         *,
         sort: Optional[SiteTrendSort] = None,
         page: Optional[int] = None,
-        per_page: Optional[int] = None
+        per_page: Optional[int] = None,
     ) -> "SiteTrendConnectionFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "sort": {"type": "SiteTrendSort", "value": sort},
@@ -3128,7 +3128,7 @@ class SiteStatisticsFields(GraphQLField):
         *,
         sort: Optional[SiteTrendSort] = None,
         page: Optional[int] = None,
-        per_page: Optional[int] = None
+        per_page: Optional[int] = None,
     ) -> "SiteTrendConnectionFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "sort": {"type": "SiteTrendSort", "value": sort},
@@ -3146,7 +3146,7 @@ class SiteStatisticsFields(GraphQLField):
         *,
         sort: Optional[SiteTrendSort] = None,
         page: Optional[int] = None,
-        per_page: Optional[int] = None
+        per_page: Optional[int] = None,
     ) -> "SiteTrendConnectionFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "sort": {"type": "SiteTrendSort", "value": sort},
@@ -3164,7 +3164,7 @@ class SiteStatisticsFields(GraphQLField):
         *,
         sort: Optional[SiteTrendSort] = None,
         page: Optional[int] = None,
-        per_page: Optional[int] = None
+        per_page: Optional[int] = None,
     ) -> "SiteTrendConnectionFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "sort": {"type": "SiteTrendSort", "value": sort},
@@ -3182,7 +3182,7 @@ class SiteStatisticsFields(GraphQLField):
         *,
         sort: Optional[SiteTrendSort] = None,
         page: Optional[int] = None,
-        per_page: Optional[int] = None
+        per_page: Optional[int] = None,
     ) -> "SiteTrendConnectionFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "sort": {"type": "SiteTrendSort", "value": sort},
@@ -3200,7 +3200,7 @@ class SiteStatisticsFields(GraphQLField):
         *,
         sort: Optional[SiteTrendSort] = None,
         page: Optional[int] = None,
-        per_page: Optional[int] = None
+        per_page: Optional[int] = None,
     ) -> "SiteTrendConnectionFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "sort": {"type": "SiteTrendSort", "value": sort},
@@ -3218,7 +3218,7 @@ class SiteStatisticsFields(GraphQLField):
         *,
         sort: Optional[SiteTrendSort] = None,
         page: Optional[int] = None,
-        per_page: Optional[int] = None
+        per_page: Optional[int] = None,
     ) -> "SiteTrendConnectionFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "sort": {"type": "SiteTrendSort", "value": sort},
@@ -3277,7 +3277,7 @@ class SiteTrendConnectionFields(GraphQLField):
             "PageInfoFields",
             "SiteTrendEdgeFields",
             "SiteTrendFields",
-        ]
+        ],
     ) -> "SiteTrendConnectionFields":
         """Subfields should come from the SiteTrendConnectionFields class"""
         self._subfields.extend(subfields)
@@ -3356,7 +3356,7 @@ class StaffFields(GraphQLField):
         type: Optional[MediaType] = None,
         on_list: Optional[bool] = None,
         page: Optional[int] = None,
-        per_page: Optional[int] = None
+        per_page: Optional[int] = None,
     ) -> "MediaConnectionFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "sort": {"type": "MediaSort", "value": sort},
@@ -3376,7 +3376,7 @@ class StaffFields(GraphQLField):
         *,
         sort: Optional[CharacterSort] = None,
         page: Optional[int] = None,
-        per_page: Optional[int] = None
+        per_page: Optional[int] = None,
     ) -> "CharacterConnectionFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "sort": {"type": "CharacterSort", "value": sort},
@@ -3395,7 +3395,7 @@ class StaffFields(GraphQLField):
         sort: Optional[MediaSort] = None,
         on_list: Optional[bool] = None,
         page: Optional[int] = None,
-        per_page: Optional[int] = None
+        per_page: Optional[int] = None,
     ) -> "MediaConnectionFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "sort": {"type": "MediaSort", "value": sort},
@@ -3434,7 +3434,7 @@ class StaffFields(GraphQLField):
             "StaffImageFields",
             "StaffNameFields",
             "UserFields",
-        ]
+        ],
     ) -> "StaffFields":
         """Subfields should come from the StaffFields class"""
         self._subfields.extend(subfields)
@@ -3465,7 +3465,7 @@ class StaffConnectionFields(GraphQLField):
             "PageInfoFields",
             "StaffEdgeFields",
             "StaffFields",
-        ]
+        ],
     ) -> "StaffConnectionFields":
         """Subfields should come from the StaffConnectionFields class"""
         self._subfields.extend(subfields)
@@ -3600,7 +3600,7 @@ class StudioFields(GraphQLField):
         is_main: Optional[bool] = None,
         on_list: Optional[bool] = None,
         page: Optional[int] = None,
-        per_page: Optional[int] = None
+        per_page: Optional[int] = None,
     ) -> "MediaConnectionFields":
         arguments: Dict[str, Dict[str, Any]] = {
             "sort": {"type": "MediaSort", "value": sort},
@@ -3650,7 +3650,7 @@ class StudioConnectionFields(GraphQLField):
             "PageInfoFields",
             "StudioEdgeFields",
             "StudioFields",
-        ]
+        ],
     ) -> "StudioConnectionFields":
         """Subfields should come from the StudioConnectionFields class"""
         self._subfields.extend(subfields)
@@ -3762,7 +3762,9 @@ class TextActivityFields(GraphQLField):
 
     def fields(
         self,
-        *subfields: Union[TextActivityGraphQLField, "ActivityReplyFields", "UserFields"]
+        *subfields: Union[
+            TextActivityGraphQLField, "ActivityReplyFields", "UserFields"
+        ],
     ) -> "TextActivityFields":
         """Subfields should come from the TextActivityFields class"""
         self._subfields.extend(subfields)
@@ -3827,7 +3829,7 @@ class ThreadFields(GraphQLField):
         self,
         *subfields: Union[
             ThreadGraphQLField, "MediaFields", "ThreadCategoryFields", "UserFields"
-        ]
+        ],
     ) -> "ThreadFields":
         """Subfields should come from the ThreadFields class"""
         self._subfields.extend(subfields)
@@ -3941,7 +3943,7 @@ class ThreadCommentLikeNotificationFields(GraphQLField):
             "ThreadCommentFields",
             "ThreadFields",
             "UserFields",
-        ]
+        ],
     ) -> "ThreadCommentLikeNotificationFields":
         """Subfields should come from the ThreadCommentLikeNotificationFields class"""
         self._subfields.extend(subfields)
@@ -3991,7 +3993,7 @@ class ThreadCommentMentionNotificationFields(GraphQLField):
             "ThreadCommentFields",
             "ThreadFields",
             "UserFields",
-        ]
+        ],
     ) -> "ThreadCommentMentionNotificationFields":
         """Subfields should come from the ThreadCommentMentionNotificationFields class"""
         self._subfields.extend(subfields)
@@ -4041,7 +4043,7 @@ class ThreadCommentReplyNotificationFields(GraphQLField):
             "ThreadCommentFields",
             "ThreadFields",
             "UserFields",
-        ]
+        ],
     ) -> "ThreadCommentReplyNotificationFields":
         """Subfields should come from the ThreadCommentReplyNotificationFields class"""
         self._subfields.extend(subfields)
@@ -4091,7 +4093,7 @@ class ThreadCommentSubscribedNotificationFields(GraphQLField):
             "ThreadCommentFields",
             "ThreadFields",
             "UserFields",
-        ]
+        ],
     ) -> "ThreadCommentSubscribedNotificationFields":
         """Subfields should come from the ThreadCommentSubscribedNotificationFields class"""
         self._subfields.extend(subfields)
@@ -4139,7 +4141,7 @@ class ThreadLikeNotificationFields(GraphQLField):
             "ThreadCommentFields",
             "ThreadFields",
             "UserFields",
-        ]
+        ],
     ) -> "ThreadLikeNotificationFields":
         """Subfields should come from the ThreadLikeNotificationFields class"""
         self._subfields.extend(subfields)
@@ -4225,7 +4227,7 @@ class UserFields(GraphQLField):
             "UserPreviousNameFields",
             "UserStatisticTypesFields",
             "UserStatsFields",
-        ]
+        ],
     ) -> "UserFields":
         """Subfields should come from the UserFields class"""
         self._subfields.extend(subfields)
@@ -4424,7 +4426,7 @@ class UserOptionsFields(GraphQLField):
             UserOptionsGraphQLField,
             "ListActivityOptionFields",
             "NotificationOptionFields",
-        ]
+        ],
     ) -> "UserOptionsFields":
         """Subfields should come from the UserOptionsFields class"""
         self._subfields.extend(subfields)
@@ -4795,7 +4797,7 @@ class UserStatisticsFields(GraphQLField):
             "UserStudioStatisticFields",
             "UserTagStatisticFields",
             "UserVoiceActorStatisticFields",
-        ]
+        ],
     ) -> "UserStatisticsFields":
         """Subfields should come from the UserStatisticsFields class"""
         self._subfields.extend(subfields)
@@ -4884,7 +4886,7 @@ class UserStatsFields(GraphQLField):
             "TagStatsFields",
             "UserActivityHistoryFields",
             "YearStatsFields",
-        ]
+        ],
     ) -> "UserStatsFields":
         """Subfields should come from the UserStatsFields class"""
         self._subfields.extend(subfields)

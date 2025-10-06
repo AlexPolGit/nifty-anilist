@@ -1,7 +1,14 @@
 from unittest.mock import patch
 
 from nifty_anilist.settings import TokenSavingMethod
-from nifty_anilist.auth import sign_in, get_auth_info, get_global_user, set_global_user, logout_global_user, remove_user
+from nifty_anilist.auth import (
+    sign_in,
+    get_auth_info,
+    get_global_user,
+    set_global_user,
+    logout_global_user,
+    remove_user,
+)
 from test.util.patches import patch_auth_dotenv_path
 
 
@@ -10,38 +17,34 @@ MOCK_USER_ID_2 = "5678"
 MOCK_AUTH_TOKEN_1 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiIyMTI0MiIsInN1YiI6IjEyMzQiLCJleHAiOjQ4OTEzODEyMDB9.mb7CoDSN220-Pj5aEKfM_EH1h0gNBpq0y7rEgBEchHE"
 MOCK_AUTH_TOKEN_2 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiIyMTI0MiIsInN1YiI6IjU2NzgiLCJleHAiOjQ4OTEzODEyMDB9.FQisbdGbVF8qM-RtTICeFaf4R-iXjDcNLC4Hlf5y40A"
 MOCK_AUTH_TOKEN_CONTENTS_1 = {
-    "header": {
-        "alg": "HS256",
-        "typ": "JWT"
-    },
-    "payload": {
-        "aud": "21242",
-        "sub": MOCK_USER_ID_1,
-        "exp": 4891381200
-    },
-    "secret": "my-secret-string-for-encryption-123"
+    "header": {"alg": "HS256", "typ": "JWT"},
+    "payload": {"aud": "21242", "sub": MOCK_USER_ID_1, "exp": 4891381200},
+    "secret": "my-secret-string-for-encryption-123",
 }
 MOCK_AUTH_TOKEN_CONTENTS_2 = {
-    "header": {
-        "alg": "HS256",
-        "typ": "JWT"
-    },
-    "payload": {
-        "aud": "21242",
-        "sub": MOCK_USER_ID_1,
-        "exp": 4891381200
-    },
-    "secret": "my-secret-string-for-encryption-123"
+    "header": {"alg": "HS256", "typ": "JWT"},
+    "payload": {"aud": "21242", "sub": MOCK_USER_ID_1, "exp": 4891381200},
+    "secret": "my-secret-string-for-encryption-123",
 }
 
 
 class TestAuthenticationFunctions:
 
     def test_multi_user_workflow(self, patch_auth_dotenv_path):
-        patch_token_saving_method = patch("nifty_anilist.utils.auth_utils.anilist_settings.token_saving_method", TokenSavingMethod.IN_MEMORY)
-        patch_generate_new_token = patch("nifty_anilist.auth.generate_new_token", side_effect=[MOCK_AUTH_TOKEN_1, MOCK_AUTH_TOKEN_2, MOCK_AUTH_TOKEN_2])
+        patch_token_saving_method = patch(
+            "nifty_anilist.utils.auth_utils.anilist_settings.token_saving_method",
+            TokenSavingMethod.IN_MEMORY,
+        )
+        patch_generate_new_token = patch(
+            "nifty_anilist.auth.generate_new_token",
+            side_effect=[MOCK_AUTH_TOKEN_1, MOCK_AUTH_TOKEN_2, MOCK_AUTH_TOKEN_2],
+        )
 
-        with patch_auth_dotenv_path, patch_token_saving_method, patch_generate_new_token:
+        with (
+            patch_auth_dotenv_path,
+            patch_token_saving_method,
+            patch_generate_new_token,
+        ):
             # Test 1: Ensure you can get the auth info of a user either through the global user or directly.
             logout_global_user()
             assert get_global_user() == None

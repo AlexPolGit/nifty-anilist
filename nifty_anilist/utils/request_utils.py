@@ -11,10 +11,13 @@ from nifty_anilist.client.exceptions import GraphQLClientHttpError
 
 class RateLimitException(Exception):
     """Custom error to be thrown when we hit our internal rate limit."""
+
     pass
 
 
-async def run_request_with_retry(api_request_function: Coroutine[Any, Any, Dict[str, Any]]) -> Dict[str, Any]:
+async def run_request_with_retry(
+    api_request_function: Coroutine[Any, Any, Dict[str, Any]],
+) -> Dict[str, Any]:
     """Function for running an async Anilist API request and retrying if a rate limit error happens.
 
     Args:
@@ -58,7 +61,12 @@ async def run_request_with_retry(api_request_function: Coroutine[Any, Any, Dict[
     raise RuntimeError("Failed to complete request.")
 
 
-async def sleep_for_rate_limit(initial_delay: Optional[int], attempt: int, max_attempts: Optional[int], error: Union[RateLimitException, GraphQLClientHttpError]):
+async def sleep_for_rate_limit(
+    initial_delay: Optional[int],
+    attempt: int,
+    max_attempts: Optional[int],
+    error: Union[RateLimitException, GraphQLClientHttpError],
+):
     """Function to sleep after a rate limit was imposed on our API calls.
 
     Args:
@@ -68,12 +76,14 @@ async def sleep_for_rate_limit(initial_delay: Optional[int], attempt: int, max_a
         error: Error that caused this sleep attempt. "RateLimitException" = from internal rate limiter. "GraphQLClientHttpError" = rate limit error from API.
     """
     if attempt == max_attempts:
-        raise RuntimeError(f"Could not complete request after {max_attempts} attempts.") from error
+        raise RuntimeError(
+            f"Could not complete request after {max_attempts} attempts."
+        ) from error
 
     delay: int
 
     # Expect "RateLimitException" to be thrown by our own rate limiter.
-    if (isinstance(error, RateLimitException)):
+    if isinstance(error, RateLimitException):
         # If the initial delay was provided, use it and increment by 5 seconds every time.
         if initial_delay:
             delay = initial_delay if attempt == 1 else (attempt * 2)
@@ -95,9 +105,13 @@ async def sleep_for_rate_limit(initial_delay: Optional[int], attempt: int, max_a
                 if retry_after:
                     delay = int(retry_after)
                 else:
-                    raise RuntimeError("Could not find \"Retry-After\" header in rate limit response.") from error
+                    raise RuntimeError(
+                        'Could not find "Retry-After" header in rate limit response.'
+                    ) from error
             else:
-                raise RuntimeError("Could not extract base error from TransportServerError.") from error
+                raise RuntimeError(
+                    "Could not extract base error from TransportServerError."
+                ) from error
 
     logger.warning(f"Retrying due to rate limit error in {delay}s (attempt {attempt}).")
     await asyncio.sleep(delay)
@@ -117,10 +131,10 @@ def attempt_iterator(max_attempts: Optional[int] = None):
 
 # ------------------------- Local request counter (rate limiter) that is used if a max requests per minute is set in the settings. -----
 
-REQUEST_COUNTER_LOCK = asyncio.Lock()
+REQUEST_COUNTER_LOCK: asyncio.Lock = asyncio.Lock()
 """Global lock for interacting with the attempt recorder."""
 
-REQUEST_COUNTER = deque()
+REQUEST_COUNTER: deque[float] = deque()
 """Sliding request counter that holds all the API call attempts made in the last minute."""
 
 

@@ -143,7 +143,7 @@ class Query:
         popularity_greater: Optional[int] = None,
         popularity_lesser: Optional[int] = None,
         source_in: Optional[MediaSource] = None,
-        sort: Optional[MediaSort] = None
+        sort: Optional[MediaSort] = None,
     ) -> MediaFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "id": {"type": "Int", "value": id},
@@ -249,7 +249,7 @@ class Query:
         episode_greater: Optional[int] = None,
         episode_lesser: Optional[int] = None,
         episode_not: Optional[int] = None,
-        sort: Optional[MediaTrendSort] = None
+        sort: Optional[MediaTrendSort] = None,
     ) -> MediaTrendFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "mediaId": {"type": "Int", "value": media_id},
@@ -305,7 +305,7 @@ class Query:
         episode_lesser: Optional[int] = None,
         airing_at_greater: Optional[int] = None,
         airing_at_lesser: Optional[int] = None,
-        sort: Optional[AiringSort] = None
+        sort: Optional[AiringSort] = None,
     ) -> AiringScheduleFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "id": {"type": "Int", "value": id},
@@ -345,7 +345,7 @@ class Query:
         id_not: Optional[int] = None,
         id_in: Optional[int] = None,
         id_not_in: Optional[int] = None,
-        sort: Optional[CharacterSort] = None
+        sort: Optional[CharacterSort] = None,
     ) -> CharacterFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "id": {"type": "Int", "value": id},
@@ -371,7 +371,7 @@ class Query:
         id_not: Optional[int] = None,
         id_in: Optional[int] = None,
         id_not_in: Optional[int] = None,
-        sort: Optional[StaffSort] = None
+        sort: Optional[StaffSort] = None,
     ) -> StaffFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "id": {"type": "Int", "value": id},
@@ -415,7 +415,7 @@ class Query:
         completed_at_greater: Optional[Any] = None,
         completed_at_lesser: Optional[Any] = None,
         completed_at_like: Optional[str] = None,
-        sort: Optional[MediaListSort] = None
+        sort: Optional[MediaListSort] = None,
     ) -> MediaListFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "id": {"type": "Int", "value": id},
@@ -479,7 +479,7 @@ class Query:
         completed_at_greater: Optional[Any] = None,
         completed_at_lesser: Optional[Any] = None,
         completed_at_like: Optional[str] = None,
-        sort: Optional[MediaListSort] = None
+        sort: Optional[MediaListSort] = None,
     ) -> MediaListCollectionFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "userId": {"type": "Int", "value": user_id},
@@ -544,7 +544,7 @@ class Query:
         name: Optional[str] = None,
         is_moderator: Optional[bool] = None,
         search: Optional[str] = None,
-        sort: Optional[UserSort] = None
+        sort: Optional[UserSort] = None,
     ) -> UserFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "id": {"type": "Int", "value": id},
@@ -568,7 +568,7 @@ class Query:
         *,
         type: Optional[NotificationType] = None,
         reset_notification_count: Optional[bool] = None,
-        type_in: Optional[NotificationType] = None
+        type_in: Optional[NotificationType] = None,
     ) -> NotificationUnionUnion:
         arguments: Dict[str, Dict[str, Any]] = {
             "type": {"type": "NotificationType", "value": type},
@@ -594,7 +594,7 @@ class Query:
         id_not: Optional[int] = None,
         id_in: Optional[int] = None,
         id_not_in: Optional[int] = None,
-        sort: Optional[StudioSort] = None
+        sort: Optional[StudioSort] = None,
     ) -> StudioFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "id": {"type": "Int", "value": id},
@@ -617,7 +617,7 @@ class Query:
         media_id: Optional[int] = None,
         user_id: Optional[int] = None,
         media_type: Optional[MediaType] = None,
-        sort: Optional[ReviewSort] = None
+        sort: Optional[ReviewSort] = None,
     ) -> ReviewFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "id": {"type": "Int", "value": id},
@@ -661,7 +661,7 @@ class Query:
         type_not_in: Optional[ActivityType] = None,
         created_at_greater: Optional[int] = None,
         created_at_lesser: Optional[int] = None,
-        sort: Optional[ActivitySort] = None
+        sort: Optional[ActivitySort] = None,
     ) -> ActivityUnionUnion:
         arguments: Dict[str, Dict[str, Any]] = {
             "id": {"type": "Int", "value": id},
@@ -749,7 +749,7 @@ class Query:
         media_category_id: Optional[int] = None,
         search: Optional[str] = None,
         id_in: Optional[int] = None,
-        sort: Optional[ThreadSort] = None
+        sort: Optional[ThreadSort] = None,
     ) -> ThreadFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "id": {"type": "Int", "value": id},
@@ -774,7 +774,7 @@ class Query:
         id: Optional[int] = None,
         thread_id: Optional[int] = None,
         user_id: Optional[int] = None,
-        sort: Optional[ThreadCommentSort] = None
+        sort: Optional[ThreadCommentSort] = None,
     ) -> ThreadCommentFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "id": {"type": "Int", "value": id},
@@ -801,7 +801,7 @@ class Query:
         on_list: Optional[bool] = None,
         rating_greater: Optional[int] = None,
         rating_lesser: Optional[int] = None,
-        sort: Optional[RecommendationSort] = None
+        sort: Optional[RecommendationSort] = None,
     ) -> RecommendationFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "id": {"type": "Int", "value": id},
@@ -858,7 +858,7 @@ class Query:
         *,
         id: Optional[int] = None,
         type: Optional[ExternalLinkType] = None,
-        media_type: Optional[ExternalLinkMediaType] = None
+        media_type: Optional[ExternalLinkMediaType] = None,
     ) -> MediaExternalLinkFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "id": {"type": "Int", "value": id},

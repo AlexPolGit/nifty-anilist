@@ -27,9 +27,9 @@ def save_token(user_id: UserId, token: str) -> None:
         user_id: ID of the user to save the token for.
         token: The value of the token to save.
     """
-    if (anilist_settings.token_saving_method == TokenSavingMethod.KEYRING):
+    if anilist_settings.token_saving_method == TokenSavingMethod.KEYRING:
         keyring.set_password(KEYRING_SERVICE_NAME, str(user_id), token)
-    elif (anilist_settings.token_saving_method == TokenSavingMethod.IN_MEMORY):
+    elif anilist_settings.token_saving_method == TokenSavingMethod.IN_MEMORY:
         IN_MEMORY_TOKEN_STORAGE[user_id] = token
     else:
         raise ValueError("Unknown token storage method.")
@@ -41,9 +41,9 @@ def get_token(user_id: UserId) -> Optional[str]:
     Args:
         user_id: ID of the user to get the token for.
     """
-    if (anilist_settings.token_saving_method == TokenSavingMethod.KEYRING):
+    if anilist_settings.token_saving_method == TokenSavingMethod.KEYRING:
         return keyring.get_password(KEYRING_SERVICE_NAME, str(user_id))
-    elif (anilist_settings.token_saving_method == TokenSavingMethod.IN_MEMORY):
+    elif anilist_settings.token_saving_method == TokenSavingMethod.IN_MEMORY:
         return IN_MEMORY_TOKEN_STORAGE[user_id]
     else:
         raise ValueError("Unknown token storage method.")
@@ -55,9 +55,9 @@ def delete_token(user_id: UserId) -> None:
     Args:
         user_id: ID of the user to delete the token for.
     """
-    if (anilist_settings.token_saving_method == TokenSavingMethod.KEYRING):
+    if anilist_settings.token_saving_method == TokenSavingMethod.KEYRING:
         keyring.delete_password(KEYRING_SERVICE_NAME, str(user_id))
-    elif (anilist_settings.token_saving_method == TokenSavingMethod.IN_MEMORY):
+    elif anilist_settings.token_saving_method == TokenSavingMethod.IN_MEMORY:
         try:
             IN_MEMORY_TOKEN_STORAGE.pop(user_id)
         except KeyError:
@@ -85,23 +85,23 @@ def generate_new_token() -> str:
     response = httpx.post(
         url=anilist_settings.token_url,
         data={
-            'grant_type': 'authorization_code',
-            'code': auth_code,
-            'redirect_uri': anilist_settings.client_redirect_url
+            "grant_type": "authorization_code",
+            "code": auth_code,
+            "redirect_uri": anilist_settings.client_redirect_url,
         },
         follow_redirects=False,
-        auth=(anilist_settings.client_id, anilist_settings.client_secret)
+        auth=(anilist_settings.client_id, anilist_settings.client_secret),
     )
 
     response.raise_for_status()
     data = response.json()
 
-    if 'access_token' not in data:
-        raise RuntimeError('Access token missing from AniList OAuth response.')
+    if "access_token" not in data:
+        raise RuntimeError("Access token missing from AniList OAuth response.")
 
     logger.info("Aquired new auth token.")
 
-    return data['access_token']
+    return data["access_token"]
 
 
 def get_user_from_token(token: str) -> UserId:
@@ -151,19 +151,25 @@ def get_auth_code_from_browser() -> str:
     driver = get_webdriver()
 
     # Setup AniList OAuth URL.
-    auth_url = f"{anilist_settings.auth_url}?" \
-        f"client_id={anilist_settings.client_id}&" \
-        f"redirect_uri={anilist_settings.client_redirect_url}&" \
+    auth_url = (
+        f"{anilist_settings.auth_url}?"
+        f"client_id={anilist_settings.client_id}&"
+        f"redirect_uri={anilist_settings.client_redirect_url}&"
         f"response_type=code"
+    )
 
-    logger.info(f"Opening auth page in {anilist_settings.auth_code_browser.title()}: {auth_url}")
+    logger.info(
+        f"Opening auth page in {anilist_settings.auth_code_browser.title()}: {auth_url}"
+    )
 
     # Open the page.
     driver.get(auth_url)
 
     # Wait for redirect to callback page with code.
     WebDriverWait(driver, anilist_settings.auth_code_brower_timeout_seconds).until(
-        expected_conditions.url_contains(f"{anilist_settings.client_redirect_url}?code=")
+        expected_conditions.url_contains(
+            f"{anilist_settings.client_redirect_url}?code="
+        )
     )
 
     # Extract the code from the URL

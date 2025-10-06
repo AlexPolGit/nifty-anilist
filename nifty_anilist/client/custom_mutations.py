@@ -56,7 +56,7 @@ class Mutation:
         manga_list_options: Optional[MediaListOptionsInput] = None,
         staff_name_language: Optional[UserStaffNameLanguage] = None,
         restrict_messages_to_following: Optional[bool] = None,
-        disabled_list_activity: Optional[ListActivityOptionInput] = None
+        disabled_list_activity: Optional[ListActivityOptionInput] = None,
     ) -> UserFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "about": {"type": "String", "value": about},
@@ -118,7 +118,7 @@ class Mutation:
         custom_lists: Optional[str] = None,
         advanced_scores: Optional[float] = None,
         started_at: Optional[FuzzyDateInput] = None,
-        completed_at: Optional[FuzzyDateInput] = None
+        completed_at: Optional[FuzzyDateInput] = None,
     ) -> MediaListFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "id": {"type": "Int", "value": id},
@@ -165,7 +165,7 @@ class Mutation:
         advanced_scores: Optional[float] = None,
         started_at: Optional[FuzzyDateInput] = None,
         completed_at: Optional[FuzzyDateInput] = None,
-        ids: Optional[int] = None
+        ids: Optional[int] = None,
     ) -> MediaListFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "status": {"type": "MediaListStatus", "value": status},
@@ -222,7 +222,7 @@ class Mutation:
         *,
         id: Optional[int] = None,
         text: Optional[str] = None,
-        locked: Optional[bool] = None
+        locked: Optional[bool] = None,
     ) -> TextActivityFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "id": {"type": "Int", "value": id},
@@ -245,7 +245,7 @@ class Mutation:
         recipient_id: Optional[int] = None,
         private: Optional[bool] = None,
         locked: Optional[bool] = None,
-        as_mod: Optional[bool] = None
+        as_mod: Optional[bool] = None,
     ) -> MessageActivityFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "id": {"type": "Int", "value": id},
@@ -322,7 +322,7 @@ class Mutation:
         id: Optional[int] = None,
         activity_id: Optional[int] = None,
         text: Optional[str] = None,
-        as_mod: Optional[bool] = None
+        as_mod: Optional[bool] = None,
     ) -> ActivityReplyFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "id": {"type": "Int", "value": id},
@@ -393,7 +393,7 @@ class Mutation:
         manga_id: Optional[int] = None,
         character_id: Optional[int] = None,
         staff_id: Optional[int] = None,
-        studio_id: Optional[int] = None
+        studio_id: Optional[int] = None,
     ) -> FavouritesFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "animeId": {"type": "Int", "value": anime_id},
@@ -422,7 +422,7 @@ class Mutation:
         manga_order: Optional[int] = None,
         character_order: Optional[int] = None,
         staff_order: Optional[int] = None,
-        studio_order: Optional[int] = None
+        studio_order: Optional[int] = None,
     ) -> FavouritesFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "animeIds": {"type": "Int", "value": anime_ids},
@@ -452,7 +452,7 @@ class Mutation:
         body: Optional[str] = None,
         summary: Optional[str] = None,
         score: Optional[int] = None,
-        private: Optional[bool] = None
+        private: Optional[bool] = None,
     ) -> ReviewFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "id": {"type": "Int", "value": id},
@@ -494,7 +494,7 @@ class Mutation:
         *,
         media_id: Optional[int] = None,
         media_recommendation_id: Optional[int] = None,
-        rating: Optional[RecommendationRating] = None
+        rating: Optional[RecommendationRating] = None,
     ) -> RecommendationFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "mediaId": {"type": "Int", "value": media_id},
@@ -518,7 +518,7 @@ class Mutation:
         categories: Optional[int] = None,
         media_categories: Optional[int] = None,
         sticky: Optional[bool] = None,
-        locked: Optional[bool] = None
+        locked: Optional[bool] = None,
     ) -> ThreadFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "id": {"type": "Int", "value": id},
@@ -565,7 +565,7 @@ class Mutation:
         thread_id: Optional[int] = None,
         parent_comment_id: Optional[int] = None,
         comment: Optional[str] = None,
-        locked: Optional[bool] = None
+        locked: Optional[bool] = None,
     ) -> ThreadCommentFields:
         arguments: Dict[str, Dict[str, Any]] = {
             "id": {"type": "Int", "value": id},
@@ -598,7 +598,7 @@ class Mutation:
         title_language: Optional[str] = None,
         outgoing_link_provider: Optional[str] = None,
         theme: Optional[str] = None,
-        sort: Optional[str] = None
+        sort: Optional[str] = None,
     ) -> GraphQLField:
         arguments: Dict[str, Dict[str, Any]] = {
             "titleLanguage": {"type": "String", "value": title_language},

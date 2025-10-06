@@ -1,7 +1,15 @@
 from typing import Optional
 from dotenv import get_key, set_key, unset_key
 
-from nifty_anilist.utils.auth_utils import UserId, get_token, save_token, delete_token, generate_new_token, get_user_from_token, is_token_expired
+from nifty_anilist.utils.auth_utils import (
+    UserId,
+    get_token,
+    save_token,
+    delete_token,
+    generate_new_token,
+    get_user_from_token,
+    is_token_expired,
+)
 from nifty_anilist.logging import anilist_logger as logger
 
 
@@ -16,6 +24,7 @@ class AuthInfo:
     def __init__(self, user_id: UserId, token: str) -> None:
         self.user_id = user_id
         self.token = token
+
 
 def sign_in(set_global: bool = False) -> AuthInfo:
     """Manually sign into Anilist.
