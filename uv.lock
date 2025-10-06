@@ -415,6 +415,7 @@ source = { editable = "." }
 dependencies = [
     { name = "asyncio" },
     { name = "colorama" },
+    { name = "graphql-core" },
     { name = "httpx" },
     { name = "keyring" },
     { name = "pydantic" },
@@ -437,6 +438,7 @@ dev = [
 requires-dist = [
     { name = "asyncio", specifier = ">=4.0.0" },
     { name = "colorama", specifier = ">=0.4.6" },
+    { name = "graphql-core", specifier = ">=3.2.6" },
     { name = "httpx", specifier = ">=0.28.1" },
     { name = "keyring", specifier = ">=25.6.0" },
     { name = "pydantic", specifier = ">=2.11.9" },

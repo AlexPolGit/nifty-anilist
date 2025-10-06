@@ -12,6 +12,7 @@ requires-python = ">=3.12"
 dependencies = [
     "asyncio>=4.0.0",
     "colorama>=0.4.6",
+    "graphql-core>=3.2.6",
     "httpx>=0.28.1",
     "keyring>=25.6.0",
     "pydantic>=2.11.9",
@@ -27,9 +28,6 @@ dependencies = [
 
 [tool.setuptools]
 include-package-data = true
-
-[tool.setuptools.package-data]
-"nifty_anilist" = ["*.graphql"]
 
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]
