@@ -28,13 +28,17 @@ class Client(AsyncBaseClient):
         self, *fields: GraphQLField, operation_type: OperationType, operation_name: str
     ) -> Dict[str, Any]:
         selections = self._build_selection_set(fields)
+        print("selections: ", selections)
         combined_variables = self._combine_variables(fields)
+        print("combined_variables: ", combined_variables)
         variable_definitions = self._build_variable_definitions(
             combined_variables["types"]
         )
+        print("variable_definitions: ", variable_definitions)
         operation_ast = self._build_operation_ast(
             selections, operation_type, operation_name, variable_definitions
         )
+        print("operation_ast: ", print_ast(operation_ast))
         response = await self.execute(
             print_ast(operation_ast),
             variables=combined_variables["values"],

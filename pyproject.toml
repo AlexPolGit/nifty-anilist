@@ -35,7 +35,7 @@ build-backend = "setuptools.build_meta"
 
 [dependency-groups]
 dev = [
-    "ariadne-codegen>=0.15.3",
+    "ariadne-codegen",
     "pre-commit>=4.3.0",
     "pytest>=8.4.2",
     "pytest-asyncio>=1.2.0",
@@ -46,3 +46,6 @@ enable_custom_operations = true
 target_package_name = "client"
 target_package_path = "nifty_anilist"
 remote_schema_url = "https://graphql.anilist.co"
+
+[tool.uv.sources]
+ariadne-codegen = { path = "../ariadne-codegen" }

@@ -27,8 +27,7 @@ wheels = [
 
 [[package]]
 name = "ariadne-codegen"
-version = "0.15.3"
-source = { registry = "https://pypi.org/simple" }
+source = { directory = "../ariadne-codegen" }
 dependencies = [
     { name = "autoflake" },
     { name = "black" },
@@ -39,10 +38,33 @@ dependencies = [
     { name = "pydantic" },
     { name = "toml" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/eb/80/77efaec6129440d4c303e403e4fbf7196e02ac3f45cf72ab86614c8f944e/ariadne_codegen-0.15.3.tar.gz", hash = "sha256:30d8b876168411fb05eb52398ab319ce994b6d0b3fe6ae17056dc8a9f14aea6e", size = 66333, upload-time = "2025-09-19T10:24:15.629Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/5c/af/ce9774603c1f501b0e4a4e4796f48c05bbde2110e34d1479137711490c83/ariadne_codegen-0.15.3-py3-none-any.whl", hash = "sha256:7cd2cc68a7d3860422c8e03f5fe575ed6db22fca0a8a379779919fa08cf2a4f4", size = 95708, upload-time = "2025-09-19T10:24:13.247Z" },
+
+[package.metadata]
+requires-dist = [
+    { name = "ariadne", marker = "extra == 'test'" },
+    { name = "autoflake" },
+    { name = "black" },
+    { name = "click", specifier = "~=8.1" },
+    { name = "freezegun", marker = "extra == 'test'" },
+    { name = "graphql-core", specifier = ">=3.2.0,<3.3" },
+    { name = "httpx", specifier = "~=0.23" },
+    { name = "ipdb", marker = "extra == 'dev'" },
+    { name = "isort" },
+    { name = "mypy", marker = "extra == 'types'", specifier = ">=1.0.0" },
+    { name = "opentelemetry-api", marker = "extra == 'opentelemetry'" },
+    { name = "opentelemetry-api", marker = "extra == 'test'" },
+    { name = "pydantic", specifier = ">=2.0.0,<3.0.0" },
+    { name = "pytest", marker = "extra == 'test'" },
+    { name = "pytest-asyncio", marker = "extra == 'test'" },
+    { name = "pytest-httpx", marker = "extra == 'test'" },
+    { name = "pytest-mock", marker = "extra == 'test'" },
+    { name = "requests-toolbelt", marker = "extra == 'test'" },
+    { name = "toml", specifier = "~=0.10" },
+    { name = "types-toml", marker = "extra == 'test'" },
+    { name = "websockets", marker = "extra == 'subscriptions'", specifier = ">=14.2" },
+    { name = "websockets", marker = "extra == 'test'", specifier = ">=14.2" },
 ]
+provides-extras = ["dev", "opentelemetry", "subscriptions", "test", "types"]
 
 [[package]]
 name = "asyncio"
@@ -451,7 +473,7 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "ariadne-codegen", specifier = ">=0.15.3" },
+    { name = "ariadne-codegen", directory = "../ariadne-codegen" },
     { name = "pre-commit", specifier = ">=4.3.0" },
     { name = "pytest", specifier = ">=8.4.2" },
     { name = "pytest-asyncio", specifier = ">=1.2.0" },
