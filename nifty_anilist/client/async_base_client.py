@@ -18,7 +18,7 @@ from .exceptions import (
 )
 
 try:
-    from websockets import (  # type: ignore[import-not-found,unused-ignore] 
+    from websockets import (  # type: ignore[import-not-found,unused-ignore]
         ClientConnection,
         connect as ws_connect,
     )

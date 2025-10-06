@@ -13,7 +13,6 @@ from nifty_anilist.client.custom_fields import (
     UserAvatarFields,
     UserFields,
 )
-
 from nifty_anilist.client.custom_queries import Query
 
 
