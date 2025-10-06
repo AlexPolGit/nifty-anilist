@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional, Union, Coroutine
+from typing import Any, Dict, Optional, Union, Coroutine, Callable, Awaitable
 from collections import deque
 from time import time
 from http import HTTPStatus
@@ -16,7 +16,7 @@ class RateLimitException(Exception):
 
 
 async def run_request_with_retry(
-    api_request_function: Coroutine[Any, Any, Dict[str, Any]],
+    api_request_function: Callable[[], Awaitable],
 ) -> Dict[str, Any]:
     """Function for running an async Anilist API request and retrying if a rate limit error happens.
 
@@ -42,7 +42,7 @@ async def run_request_with_retry(
                     raise RateLimitException()
 
             # Run the API request.
-            result = await api_request_function
+            result = await api_request_function()
 
             # Track the request count.
             await record_request()
@@ -98,9 +98,8 @@ async def sleep_for_rate_limit(
             delay = initial_delay if attempt == 1 else (attempt * 2)
         # Otherise try to retrieve the recommended delay from response headers.
         else:
-            base_error = error.__cause__
-            if isinstance(base_error, GraphQLClientHttpError):
-                error_headers = base_error.response.headers
+            if isinstance(error, GraphQLClientHttpError):
+                error_headers = error.response.headers
                 retry_after = error_headers["Retry-After"] if error_headers else None
                 if retry_after:
                     delay = int(retry_after)
@@ -110,7 +109,7 @@ async def sleep_for_rate_limit(
                     ) from error
             else:
                 raise RuntimeError(
-                    "Could not extract base error from TransportServerError."
+                    "Could not extract base error from GraphQLClientHttpError."
                 ) from error
 
     logger.warning(f"Retrying due to rate limit error in {delay}s (attempt {attempt}).")
