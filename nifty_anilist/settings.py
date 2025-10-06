@@ -27,7 +27,6 @@ class AnilistSettings(BaseSettings):
     api_url: str = "https://graphql.anilist.co"
     auth_url: str = "https://anilist.co/api/v2/oauth/authorize"
     token_url: str = "https://anilist.co/api/v2/oauth/token"
-    schema_path: str = "anilist_schema.graphql"
 
 
     # --- Requests ---

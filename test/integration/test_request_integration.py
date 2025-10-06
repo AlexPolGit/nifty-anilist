@@ -1,17 +1,19 @@
 from unittest.mock import patch, MagicMock
 import pytest
-from gql import gql, GraphQLRequest
+
+from nifty_anilist.client.custom_queries import Query
+from nifty_anilist.client.custom_fields import UserFields, UserAvatarFields
 
 from nifty_anilist.auth import AuthInfo
-from nifty_anilist.client import AnilistClient
 from nifty_anilist.settings import anilist_settings
-
+from nifty_anilist.anilist_client import AnilistClient
+from nifty_anilist.client.custom_queries import GraphQLField
 
 class TestRequestFunctions():
 
     @pytest.fixture
     def mock_gql_request(self):
-        return MagicMock(spec=GraphQLRequest)
+        return MagicMock(spec=GraphQLField)
 
     @pytest.fixture(autouse=True)
     def patch_user_info(self):
@@ -30,19 +32,11 @@ class TestRequestFunctions():
         """Simple test to get a user's avatar."""
 
         with self.user_info:
-            query = gql("""
-                query GetUserAvatar($name: String) {
-                    User(name: $name) {
-                        avatar {
-                            large
-                        }
-                    }
-                }
-            """)
-
-            query.variable_values = {
-                "name": "robert" # Hi Robert!
-            }
+            query = Query.user(name="robert").fields( # Hi Robert!
+                UserFields.avatar().fields(
+                    UserAvatarFields.large
+                )
+            )
 
             async with AnilistClient() as client:
                 # Do query with global user.

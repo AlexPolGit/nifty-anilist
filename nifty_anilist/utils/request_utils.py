@@ -3,27 +3,10 @@ from collections import deque
 from time import time
 from http import HTTPStatus
 import asyncio
-from importlib.resources import files, as_file
-from aiohttp import ClientResponseError
-from gql.transport.exceptions import TransportServerError
 
 from nifty_anilist.settings import anilist_settings
 from nifty_anilist.logging import anilist_logger as logger
-
-
-def get_anilist_schema() -> str:
-    """Get the Anilist API GraphQL schema.
-    Will get the schema from local files.
-    
-    Returns:
-        schema_string: Anilist API GraphQL schema as a string.
-    """
-    schema_resource = files(f"nifty_anilist").joinpath(anilist_settings.schema_path)
-
-    with as_file(schema_resource) as path:
-        with open(path, "r") as f:
-            schema_string = f.read()
-            return schema_string
+from nifty_anilist.client.exceptions import GraphQLClientHttpError
 
 
 class RateLimitException(Exception):
@@ -66,8 +49,8 @@ async def run_request_with_retry(api_request_function: Coroutine[Any, Any, Dict[
         except RateLimitException as e:
             await sleep_for_rate_limit(initial_delay, attempt, max_attempts, e)
 
-        except TransportServerError as e:
-            if e.code == HTTPStatus.TOO_MANY_REQUESTS:
+        except GraphQLClientHttpError as e:
+            if e.status_code == HTTPStatus.TOO_MANY_REQUESTS:
                 await sleep_for_rate_limit(initial_delay, attempt, max_attempts, e)
             else:
                 raise
@@ -75,14 +58,14 @@ async def run_request_with_retry(api_request_function: Coroutine[Any, Any, Dict[
     raise RuntimeError("Failed to complete request.")
 
 
-async def sleep_for_rate_limit(initial_delay: Optional[int], attempt: int, max_attempts: Optional[int], error: Union[RateLimitException, TransportServerError]):
+async def sleep_for_rate_limit(initial_delay: Optional[int], attempt: int, max_attempts: Optional[int], error: Union[RateLimitException, GraphQLClientHttpError]):
     """Function to sleep after a rate limit was imposed on our API calls.
     
     Args:
         initial_delay: Initial amount of seconds to wait after getting rate limited.
         attempt: Current attempt number.
         max_attempts: Max number of attempts to make.
-        error: Error that caused this sleep attempt. "RateLimitException" = from internal rate limiter. "TransportServerError" = rate limit error from API.
+        error: Error that caused this sleep attempt. "RateLimitException" = from internal rate limiter. "GraphQLClientHttpError" = rate limit error from API.
     """
     if attempt == max_attempts:
         raise RuntimeError(f"Could not complete request after {max_attempts} attempts.") from error
@@ -106,8 +89,8 @@ async def sleep_for_rate_limit(initial_delay: Optional[int], attempt: int, max_a
         # Otherise try to retrieve the recommended delay from response headers.
         else:
             base_error = error.__cause__
-            if isinstance(base_error, ClientResponseError):
-                error_headers = base_error.headers
+            if isinstance(base_error, GraphQLClientHttpError):
+                error_headers = base_error.response.headers
                 retry_after = error_headers["Retry-After"] if error_headers else None
                 if retry_after:
                     delay = int(retry_after)
