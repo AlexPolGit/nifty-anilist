@@ -1,16 +1,18 @@
 from typing import Optional
+
 from dotenv import get_key, set_key, unset_key
 
+from nifty_anilist.logging import anilist_logger as logger
+
 from nifty_anilist.utils.auth_utils import (
-    UserId,
-    get_token,
-    save_token,
     delete_token,
     generate_new_token,
+    get_token,
     get_user_from_token,
     is_token_expired,
+    save_token,
+    UserId,
 )
-from nifty_anilist.logging import anilist_logger as logger
 
 
 DOTENV_PATH = ".env"

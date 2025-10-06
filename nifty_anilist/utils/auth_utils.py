@@ -1,13 +1,14 @@
-from typing import Optional, Dict, Union
 import time
-import httpx
 import urllib.parse as urlparse
+from typing import Dict, Optional, Union
+
+import httpx
+import jwt
 import keyring
 from selenium import webdriver
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.remote.webdriver import WebDriver
-import jwt
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support.ui import WebDriverWait
 
 from nifty_anilist.logging import anilist_logger as logger
 from nifty_anilist.settings import anilist_settings, TokenSavingMethod, WebBrowser

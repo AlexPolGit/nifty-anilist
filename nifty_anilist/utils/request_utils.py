@@ -1,12 +1,13 @@
-from typing import Any, Dict, Optional, Union, Coroutine, Callable, Awaitable
-from collections import deque
-from time import time
-from http import HTTPStatus
 import asyncio
+from collections import deque
+from http import HTTPStatus
+from time import time
+from typing import Any, Awaitable, Callable, Coroutine, Dict, Optional, Union
+
+from nifty_anilist.client.exceptions import GraphQLClientHttpError
+from nifty_anilist.logging import anilist_logger as logger
 
 from nifty_anilist.settings import anilist_settings
-from nifty_anilist.logging import anilist_logger as logger
-from nifty_anilist.client.exceptions import GraphQLClientHttpError
 
 
 class RateLimitException(Exception):

@@ -1,25 +1,22 @@
-from typing import Any, Dict, Optional, Union, List
+from typing import Any, Dict, List, Optional, Union
+
 import httpx
 
-from nifty_anilist.settings import anilist_settings
-from nifty_anilist.logging import anilist_logger as logger
-from nifty_anilist.utils.auth_utils import UserId
 from nifty_anilist.auth import get_auth_info
-from nifty_anilist.utils.request_utils import run_request_with_retry
 from nifty_anilist.client import Client
-from nifty_anilist.client.custom_queries import Query
 from nifty_anilist.client.custom_fields import PageInfoFields
 from nifty_anilist.client.custom_queries import (
-    GraphQLField,
-    PageFields,
     ActivityReplyFields,
     ActivityUnionUnion,
     AiringScheduleFields,
     CharacterFields,
+    GraphQLField,
     MediaFields,
     MediaListFields,
     MediaTrendFields,
     NotificationUnionUnion,
+    PageFields,
+    Query,
     RecommendationFields,
     ReviewFields,
     StaffFields,
@@ -28,6 +25,11 @@ from nifty_anilist.client.custom_queries import (
     ThreadFields,
     UserFields,
 )
+from nifty_anilist.logging import anilist_logger as logger
+
+from nifty_anilist.settings import anilist_settings
+from nifty_anilist.utils.auth_utils import UserId
+from nifty_anilist.utils.request_utils import run_request_with_retry
 
 
 class AnilistClient:

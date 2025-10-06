@@ -8,11 +8,11 @@ from graphql import (
     NameNode,
     OperationDefinitionNode,
     OperationType,
+    print_ast,
     SelectionNode,
     SelectionSetNode,
     VariableDefinitionNode,
     VariableNode,
-    print_ast,
 )
 
 from .async_base_client import AsyncBaseClient

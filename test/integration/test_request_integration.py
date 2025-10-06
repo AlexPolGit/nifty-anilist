@@ -1,13 +1,13 @@
-from unittest.mock import patch, MagicMock
-import pytest
+from unittest.mock import MagicMock, patch
 
-from nifty_anilist.client.custom_queries import Query
-from nifty_anilist.client.custom_fields import UserFields, UserAvatarFields
+import pytest
+from nifty_anilist.anilist_client import AnilistClient
 
 from nifty_anilist.auth import AuthInfo
+from nifty_anilist.client.custom_fields import UserAvatarFields, UserFields
+
+from nifty_anilist.client.custom_queries import GraphQLField, Query
 from nifty_anilist.settings import anilist_settings
-from nifty_anilist.anilist_client import AnilistClient
-from nifty_anilist.client.custom_queries import GraphQLField
 
 
 class TestRequestFunctions:

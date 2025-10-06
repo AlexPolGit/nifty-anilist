@@ -2,7 +2,7 @@
 
 import enum
 import json
-from typing import IO, Any, AsyncIterator, Dict, List, Optional, Tuple, TypeVar, cast
+from typing import Any, AsyncIterator, cast, Dict, IO, List, Optional, Tuple, TypeVar
 from uuid import uuid4
 
 import httpx
@@ -18,10 +18,8 @@ from .exceptions import (
 )
 
 try:
-    from websockets import (  # type: ignore[import-not-found,unused-ignore]
+    from websockets import (  # type: ignore[import-not-found,unused-ignore] 
         ClientConnection,
-    )
-    from websockets import (  # type: ignore[import-not-found,unused-ignore]
         connect as ws_connect,
     )
     from websockets.typing import (  # type: ignore[import-not-found,unused-ignore]

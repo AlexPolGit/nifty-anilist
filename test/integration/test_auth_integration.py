@@ -1,14 +1,15 @@
 from unittest.mock import patch
 
-from nifty_anilist.settings import TokenSavingMethod
 from nifty_anilist.auth import (
-    sign_in,
     get_auth_info,
     get_global_user,
-    set_global_user,
     logout_global_user,
     remove_user,
+    set_global_user,
+    sign_in,
 )
+
+from nifty_anilist.settings import TokenSavingMethod
 from test.util.patches import patch_auth_dotenv_path
 
 
