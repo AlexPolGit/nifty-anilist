@@ -5,7 +5,9 @@
 This is a simple utility library for interfacing with the [Anilist GraphQL API](https://docs.anilist.co/).
 It provides useful tools like an Anilist client to make validated requests with query builder objects and handles authentication for you.
 
-### User Setup
+### Using the Library
+
+This library is available on [PyPi](https://pypi.org/project/nifty-anilist/).
 
 To use this library, you will need to have the variables shown in [.env.example](./.env.example) in environment variables or your local `.env` file.
 Any blank variables need to be present and will throw an error if are missing.
