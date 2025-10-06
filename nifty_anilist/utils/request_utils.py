@@ -16,7 +16,7 @@ class RateLimitException(Exception):
 
 async def run_request_with_retry(api_request_function: Coroutine[Any, Any, Dict[str, Any]]) -> Dict[str, Any]:
     """Function for running an async Anilist API request and retrying if a rate limit error happens.
-    
+
     Args:
         api_request_function: Anilist API request function that returns the API result.
 
@@ -60,7 +60,7 @@ async def run_request_with_retry(api_request_function: Coroutine[Any, Any, Dict[
 
 async def sleep_for_rate_limit(initial_delay: Optional[int], attempt: int, max_attempts: Optional[int], error: Union[RateLimitException, GraphQLClientHttpError]):
     """Function to sleep after a rate limit was imposed on our API calls.
-    
+
     Args:
         initial_delay: Initial amount of seconds to wait after getting rate limited.
         attempt: Current attempt number.
@@ -126,7 +126,7 @@ REQUEST_COUNTER = deque()
 
 async def record_request() -> int:
     """Record an Anilist API request attemp.
-    
+
     Returns:
         attempts: Number of attempts in the last minute.
     """

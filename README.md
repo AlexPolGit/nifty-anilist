@@ -1,5 +1,5 @@
 # Nifty Anilist Tools
- 
+
 ## Overview
 
 This is a simple utility library for interfacing with the [Anilist GraphQL API](https://docs.anilist.co/).
@@ -15,7 +15,7 @@ Any blank variables need to be present and will throw an error if are missing.
 ## Features
 
 ### GraphQL Requests
-The Anilist API is GraphQL-based and provides a [public schema](https://studio.apollographql.com/sandbox/schema/reference). This library uses an [Ariadne](https://ariadnegraphql.org/client/intro) code-generated GraphQL client to make GraphQL requests to Anilist. 
+The Anilist API is GraphQL-based and provides a [public schema](https://studio.apollographql.com/sandbox/schema/reference). This library uses an [Ariadne](https://ariadnegraphql.org/client/intro) code-generated GraphQL client to make GraphQL requests to Anilist.
 
 To make requests to Anilist, create an `AnilistClient` and use the `anilist_request()` function. Example:
 ```py

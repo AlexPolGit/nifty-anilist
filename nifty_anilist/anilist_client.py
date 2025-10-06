@@ -17,11 +17,11 @@ class AnilistClient:
 
     def _create_client(self, user_id: Optional[UserId] = None, use_auth: bool = True) -> Client:
         """Create a client for Anilist requests.
-        
+
         Args:
             user_id: ID of the user to use for authentiation. Leave empty to use the global user.
             use_auth: Whether to auth the auth header or not. Default is `True`.
-            
+
         Returns:
             client: Custom GraphQL client for Anilist requests.
         """
@@ -34,10 +34,10 @@ class AnilistClient:
         )
 
         return client
-    
+
     def _create_request_headers(self, user_id: Optional[UserId] = None, use_auth: bool = True) -> Dict[str, str]:
         """Create headers for an Anilist API request.
-        
+
         Args:
             user_id: ID of the user to use for authentiation. Leave empty to use the global user.
             use_auth: Whether to auth the auth header or not. Default is `True`.

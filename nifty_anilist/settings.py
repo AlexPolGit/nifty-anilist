@@ -5,7 +5,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class TokenSavingMethod(StrEnum):
     """Enum for types of token-saving methods."""
-    
+
     KEYRING = "KEYRING"
     IN_MEMORY = "IN_MEMORY"
 
@@ -80,7 +80,7 @@ class AnilistSettings(BaseSettings):
     # --- Testing ---
     test_user_id: Optional[str] = None
     """User ID for test user that will be used in integration tests. \n\n**Note:** Only used for development/testing."""
-    
+
     test_user_auth_token:  Optional[str] = None
     """Auth token for test user that will be used in integration tests. \n\n**Note:** Only used for development/testing.."""
 

@@ -22,7 +22,7 @@ IN_MEMORY_TOKEN_STORAGE: Dict[UserId, str] = {}
 
 def save_token(user_id: UserId, token: str) -> None:
     """Save an auth token locally.
-    
+
     Args:
         user_id: ID of the user to save the token for.
         token: The value of the token to save.
@@ -37,7 +37,7 @@ def save_token(user_id: UserId, token: str) -> None:
 
 def get_token(user_id: UserId) -> Optional[str]:
     """Get the auth token stored locally for a user.
-    
+
     Args:
         user_id: ID of the user to get the token for.
     """
@@ -51,7 +51,7 @@ def get_token(user_id: UserId) -> Optional[str]:
 
 def delete_token(user_id: UserId) -> None:
     """Delete a local auth token.
-    
+
     Args:
         user_id: ID of the user to delete the token for.
     """
@@ -71,7 +71,7 @@ def delete_token(user_id: UserId) -> None:
 def generate_new_token() -> str:
     """Generate a new Anilist auth token.
     This will call the Anilist auth token URL and request a new token based on the provided auth code.
-    
+
     Args:
         auth_code: A short lived auth code from Anilist. See `get_auth_code_from_browser()`.
 
@@ -80,7 +80,7 @@ def generate_new_token() -> str:
     """
     # Get new auth code from browser.
     auth_code = get_auth_code_from_browser()
-    
+
     # Send auth code to Anilist's token endpoint.
     response = httpx.post(
         url=anilist_settings.token_url,
@@ -98,18 +98,18 @@ def generate_new_token() -> str:
 
     if 'access_token' not in data:
         raise RuntimeError('Access token missing from AniList OAuth response.')
-    
+
     logger.info("Aquired new auth token.")
-    
+
     return data['access_token']
 
 
 def get_user_from_token(token: str) -> UserId:
     """Get the Anilist user ID from a given (JWT) auth token.
-    
+
     Args:
         token: JWT token, as a string.
-        
+
     Returns:
         user_id: ID of the Anilist user in the JWT token.
     """
@@ -124,10 +124,10 @@ def get_user_from_token(token: str) -> UserId:
 
 def is_token_expired(token: str) -> bool:
     """Checks if the given (JWT) auth token if expired or not.
-    
+
     Args:
         token: JWT token, as a string.
-        
+
     Returns:
         expired: `True` if the JWT token is expired, `False` otherwise.
     """
@@ -143,7 +143,7 @@ def is_token_expired(token: str) -> bool:
 
 def get_auth_code_from_browser() -> str:
     """Uses a real browser to allow the user to manually sign into Anilist and then automatically retrieves their auth code.
-        
+
     Returns:
         auth_code: Short-lived Anilist auth code that was grabbed from the browser.
     """
@@ -155,9 +155,9 @@ def get_auth_code_from_browser() -> str:
         f"client_id={anilist_settings.client_id}&" \
         f"redirect_uri={anilist_settings.client_redirect_url}&" \
         f"response_type=code"
-    
+
     logger.info(f"Opening auth page in {anilist_settings.auth_code_browser.title()}: {auth_url}")
-    
+
     # Open the page.
     driver.get(auth_url)
 

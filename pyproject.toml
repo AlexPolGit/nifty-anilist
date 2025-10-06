@@ -6,7 +6,8 @@ authors = [
     { name="Alexey Polishchuk", email="alexpolishchukmail@gmail.com" }
 ]
 readme = "README.md"
-license = { text = "MIT" }
+license = "MIT"
+license-files = ["LICENSE"]
 requires-python = ">=3.12"
 dependencies = [
     "asyncio>=4.0.0",
@@ -19,8 +20,10 @@ dependencies = [
     "python-dotenv>=1.1.1",
     "selenium>=4.35.0",
     "structlog>=25.4.0",
-    "webdriver-manager>=4.0.2",
 ]
+
+[project.urls]
+"Repository" = "https://github.com/AlexPolGit/nifty-anilist"
 
 [tool.setuptools]
 include-package-data = true
@@ -35,6 +38,7 @@ build-backend = "setuptools.build_meta"
 [dependency-groups]
 dev = [
     "ariadne-codegen>=0.15.3",
+    "pre-commit>=4.3.0",
     "pytest>=8.4.2",
     "pytest-asyncio>=1.2.0",
 ]

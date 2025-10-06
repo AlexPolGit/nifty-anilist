@@ -37,7 +37,7 @@ def sign_in_if_no_global() -> AuthInfo:
     """Manually sign into Anilist if there is currently no global user.
     Will do nothing if there is already a global user.
     Run this near the start of your program to setup a global user (if you plan to use one).
-    
+
     Returns:
         auth_info: Auth info for the global user.
     """
@@ -54,7 +54,7 @@ def sign_in_if_no_global() -> AuthInfo:
 
 def sign_in_with_token(auth_token: str, set_global: bool = True) -> AuthInfo:
     """Skip manually signing into Anilist if you already have an auth token and save it directly.
-    
+
     Args:
         auth_token: JWT auth token from Anilist.
         set_global: If `True`, the signed-in user will be set as the global user.
@@ -83,7 +83,7 @@ def get_auth_info(user_id: Optional[UserId] = None) -> AuthInfo:
     Args:
         user_id: Optional ID of the user to get the auth token for.
             If not provided, will try getting the auth token of the global user.
-    
+
     Returns:
         auth_info: Auth info for the user, including an auth token that can be used in Anilist requests.
     """
@@ -111,7 +111,7 @@ def get_auth_info(user_id: Optional[UserId] = None) -> AuthInfo:
 
 def get_global_user() -> Optional[UserId]:
     """Get the current global user('s ID).
-    
+
     Returns:
         user_id: ID of the global user or `None` if there is no global user.
     """
@@ -121,7 +121,7 @@ def get_global_user() -> Optional[UserId]:
 def set_global_user(user_id: UserId) -> AuthInfo:
     """Set the global user.
     \n**Note:** This does *not* remove the previous user's auth token from your machine.
-    
+
     Args:
         user_id: ID of the user to set the global user to.
 
@@ -141,7 +141,7 @@ def logout_global_user():
 
 def remove_user(user_to_remove: Optional[UserId] = None) -> UserId:
     """Removes a user. This will remove their auth token from your machine.
-    
+
     Args:
         user_to_remove: Optional ID of user to sign out.
             If not provided, will try signing out the global user.
@@ -157,9 +157,8 @@ def remove_user(user_to_remove: Optional[UserId] = None) -> UserId:
         if user_to_remove:
             logout_global_user()
         else:
-            raise ValueError("No global user was found to remove.") 
+            raise ValueError("No global user was found to remove.")
 
     delete_token(user_to_remove)
 
     return user_to_remove
-

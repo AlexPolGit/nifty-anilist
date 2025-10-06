@@ -21,7 +21,7 @@ class TestRequestFunctions():
             raise ValueError("Test user ID not set in settings.")
         if anilist_settings.test_user_auth_token is None:
             raise ValueError("Test user auth token not set in settings.")
-        
+
         with patch("nifty_anilist.auth.get_auth_info", returns=AuthInfo(anilist_settings.test_user_id, anilist_settings.test_user_auth_token)) as user_info:
             self.user_info = user_info
             yield
@@ -44,6 +44,6 @@ class TestRequestFunctions():
 
                 # Access the avatar URL.
                 avatar_url = data["User"]["avatar"]["large"]
-                
+
                 assert isinstance(avatar_url, str)
                 assert avatar_url.startswith("https://s4.anilist.co/file/")
