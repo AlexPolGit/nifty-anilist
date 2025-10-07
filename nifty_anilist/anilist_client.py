@@ -127,6 +127,8 @@ class AnilistClient:
         ],
         starting_page: int = 1,
         per_page: int = 50,
+        max_page: Optional[int] = None,
+        max_items: Optional[int] = None,
         operation_name: str = "paginated_anilist_query",
     ) -> List[Any]:
         """Make a paginated request to the Anilist GraphQL API.
@@ -139,6 +141,8 @@ class AnilistClient:
             starting_page: Page to start the pagination from. **Note:** The API is 1-indexed, so the first page is not 0.
             per_page: Items to return per page (request). 50 is generally the maximum amount.
                 **Note:** Entering a value above the max should not throw an error but just return the max amount.
+            max_page: Maximum number of pages to query for.
+            max_items: Maxiumum number of items to query for.
             operation_name: Name of the GraphQL operation.
                 This can pretty much be anything since we are only making one request at a time.
 
@@ -153,11 +157,24 @@ class AnilistClient:
             query_request._field_name[0].lower() + query_request._field_name[1:]
         )
 
-        results = []
+        results: List[Any] = []
         has_next = True
         page = starting_page
 
         while has_next:
+            if max_page and page > max_page:
+                logger.info(
+                    f"[{query_request._field_name}] Hit max page of {max_page} for paginated request. Stopping requests here."
+                )
+                break
+
+            if max_items and len(results) >= max_items:
+                results = results[:max_items]
+                logger.info(
+                    f"[{query_request._field_name}] Hit max number of items ({max_items}) for paginated request. Stopping requests here."
+                )
+                break
+
             logger.info(
                 f"[{query_request._field_name}] Getting page {page} of paginated request."
             )

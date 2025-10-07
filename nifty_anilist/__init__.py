@@ -9,9 +9,22 @@ from .auth import (
     sign_in_if_no_global,
     sign_in_with_token,
 )
+from .prebuilt.common_models import Timestamp
+from .prebuilt.media import MediaTag, MediaTitle
+from .prebuilt.media_list import (
+    UserMediaEntry,
+    UserMediaListEntry,
+    UserMediaListFilters,
+)
 
 __all__ = [
     "AnilistClient",
+    "Timestamp",
+    "MediaTag",
+    "MediaTitle",
+    "UserMediaListEntry",
+    "UserMediaEntry",
+    "UserMediaListFilters",
     "sign_in",
     "sign_in_if_no_global",
     "sign_in_with_token",
