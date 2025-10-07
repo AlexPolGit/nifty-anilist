@@ -60,9 +60,9 @@ These functions all require a client as input and will sometimes have function-s
 
 Below is a list of currently available pre-built queries.
 
-- **[Media](./nifty_anilist/prebuilt/media.py)**: This are queries for `Query.Page.media` in the Anilist API.
+- **[Media](./nifty_anilist/prebuilt/media.py)**: These are queries for `Query.Page.media` in the Anilist API.
     - `get_media_list()`: Get a list of media (anime or manga).
-- **[Media List](./nifty_anilist/prebuilt/media_list.py)**: This are queries for `Query.Page.mediaList` in the Anilist API.
+- **[Media List](./nifty_anilist/prebuilt/media_list.py)**: These are queries for `Query.Page.mediaList` in the Anilist API.
     - `get_user_media_list()`: Get a user's list of media (anime or manga).
     - `get_my_media_list()` Get the current global user's list of media (anime or manga).
 
