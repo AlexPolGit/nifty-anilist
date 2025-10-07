@@ -120,13 +120,23 @@ def get_auth_info(user_id: Optional[UserId] = None) -> AuthInfo:
     return AuthInfo(user_id, auth_token)
 
 
-def get_global_user() -> Optional[UserId]:
+def get_global_user(raise_if_missing: bool = False) -> Optional[UserId]:
     """Get the current global user('s ID).
 
     Returns:
         user_id: ID of the global user or `None` if there is no global user.
     """
-    return get_key(DOTENV_PATH, GLOBAL_USER_ENV_VAR)
+    user_id = get_key(DOTENV_PATH, GLOBAL_USER_ENV_VAR)
+
+    if user_id is None:
+        message = "No global user was found!"
+
+        if raise_if_missing:
+            raise ValueError(message)
+        else:
+            logger.warning(message)
+
+    return user_id
 
 
 def set_global_user(user_id: UserId) -> AuthInfo:

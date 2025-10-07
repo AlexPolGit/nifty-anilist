@@ -63,8 +63,8 @@ class TestRequestFunctions:
                 assert avatar_url.startswith("https://s4.anilist.co/file/")
 
     @pytest.mark.asyncio
-    async def test_anime_list_request(self):
-        """Simple test to get a user's completed anime list with a paginated request."""
+    async def test_manual_anime_list_request(self):
+        """Test to get a user's completed anime list with a paginated request."""
 
         with self.user_info:
             async with AnilistClient() as client:
@@ -104,9 +104,13 @@ class TestRequestFunctions:
 
                 for anime in response:
                     assert isinstance(anime["id"], int)
+
                     assert isinstance(anime["mediaId"], int)
+
                     assert isinstance(anime["status"], str)
+
                     assert isinstance(anime["score"], int)
+
                     assert isinstance(anime["progress"], int)
 
                     assert isinstance(anime["startedAt"], dict)
@@ -138,9 +142,11 @@ class TestRequestFunctions:
                     )
 
                     assert anime["notes"] is None or isinstance(anime["notes"], str)
+
                     assert isinstance(anime["hiddenFromStatusLists"], bool)
 
                     assert isinstance(anime["media"], dict)
+
                     assert "title" in anime["media"]
                     assert isinstance(anime["media"]["title"], dict)
                     assert "english" in anime["media"]["title"]

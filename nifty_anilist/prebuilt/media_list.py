@@ -1,57 +1,75 @@
-from typing import List, Optional, Any
-from pydantic import BaseModel, model_validator
+from typing import Annotated, Any, Dict, List, Optional
 
-from nifty_anilist.client import MediaType, MediaListStatus, MediaListSort, ScoreFormat, MediaFormat, MediaSeason, MediaStatus
-from nifty_anilist.client.custom_fields import MediaListFields, MediaFields, MediaTitleFields, FuzzyDateFields, MediaTagFields
+from pydantic import AfterValidator, BaseModel
+
+from nifty_anilist import AnilistClient, get_global_user
+from nifty_anilist.client import (
+    MediaFormat,
+    MediaListSort,
+    MediaListStatus,
+    MediaSeason,
+    MediaStatus,
+    MediaType,
+    ScoreFormat,
+)
+from nifty_anilist.client.custom_fields import (
+    FuzzyDateFields,
+    MediaFields,
+    MediaListFields,
+    MediaTagFields,
+    MediaTitleFields,
+)
 from nifty_anilist.client.custom_queries import Query
-
-from nifty_anilist import AnilistClient, Timestamp, MediaTag, MediaTitle
+from nifty_anilist.prebuilt import MediaTag, MediaTitle, Timestamp
+from nifty_anilist.utils.auth_utils import UserId
+from nifty_anilist.utils.model_utils import validate_fuzzy_date_int
 
 
 class UserMediaListFilters(BaseModel):
-    user_id: Optional[int] = None
-    """Anilist ID of the user. Must be provided if user_name is not."""
-
-    user_name: Optional[str] = None
-    """Anilist user name of the user. Must be provided if user_id is not."""
-
-    @model_validator(mode='after')
-    def ensure_id_or_name(self):
-        """Ensure that either a user ID or user name are provided, but not both."""
-        if (self.user_id is None and self.user_name is None) or (self.user_id and self.user_name):
-            raise ValueError("Please provide one of either \"user_id\" or \"user_name\" in the media list filters (not both).")
-        return self
-
-    type: Optional[MediaType] = None
-    """Type of media to return (anime or manga). Leave as `None` for both."""
-
-    status_in: Optional[List[MediaListStatus]] = None
-    """Allowed statuses of the media. Leave as `None` for any."""
-
-    started_at_greater: Optional[int] = None
-    """Minimum datetime for when this media was started. Use an integer in the `YYYYMMDD` format. Leave as `None` for no minimum."""
-
-    started_at_lesser: Optional[int] = None
-    """Maximum datetime for when this media was started. Use an integer in the `YYYYMMDD` format. Leave as `None` for no maximum."""
-
-    completed_at_greater: Optional[int] = None
+    completed_at_greater: Annotated[
+        Optional[int], AfterValidator(validate_fuzzy_date_int)
+    ] = None
     """Minimum datetime for when this media was completed. Use an integer in the `YYYYMMDD` format. Leave as `None` for no minimum."""
 
-    completed_at_lesser: Optional[int] = None
+    completed_at_lesser: Annotated[
+        Optional[int], AfterValidator(validate_fuzzy_date_int)
+    ] = None
     """Maximum datetime for when this media was completed. Use an integer in the `YYYYMMDD` format. Leave as `None` for no maximum."""
 
-    sort: Optional[List[MediaListSort]] = [MediaListSort.SCORE_DESC, MediaListSort.MEDIA_ID]
-    """Defines how to sort the list of media. Default is sort by score (descending) and then media ID for things with the same score."""
+    started_at_greater: Annotated[
+        Optional[int], AfterValidator(validate_fuzzy_date_int)
+    ] = None
+    """Minimum datetime for when this media was started. Use an integer in the `YYYYMMDD` format. Leave as `None` for no minimum."""
+
+    started_at_lesser: Annotated[
+        Optional[int], AfterValidator(validate_fuzzy_date_int)
+    ] = None
+    """Maximum datetime for when this media was started. Use an integer in the `YYYYMMDD` format. Leave as `None` for no maximum."""
+
+    status_in: Optional[List[MediaListStatus]] = None
+    """Allowed statuses for the media. Leave as `None` for any."""
 
     score_format: ScoreFormat = ScoreFormat.POINT_100
     """What format to display scored in. Default is score out of 100."""
 
+    sort: Optional[List[MediaListSort]] = [
+        MediaListSort.SCORE_DESC,
+        MediaListSort.MEDIA_ID,
+    ]
+    """Defines how to sort the list of media. Default is sort by score (descending) and then media ID for things with the same score."""
+
+    type: Optional[MediaType] = None
+    """Type of media to return (anime or manga). Leave as `None` for both."""
+
 
 class UserMediaEntry(BaseModel):
-    """Represents the media details for a media entry in a user's list."""
+    """Represents the details for a media entry in a user's list.
+    **Note:** This is not all of the possible ones, just the ones for this helper class.
+    """
+
     averageScore: Optional[int]
     chapters: Optional[int]
-    countryOfOrigin: str
+    countryOfOrigin: Optional[str]
     description: Optional[str]
     duration: Optional[int]
     endDate: Timestamp
@@ -61,7 +79,7 @@ class UserMediaEntry(BaseModel):
     hashtag: Optional[str]
     id: int
     idMal: Optional[int]
-    isAdult: bool
+    isAdult: Optional[bool]
     isFavourite: bool
     meanScore: Optional[int]
     season: Optional[MediaSeason]
@@ -70,7 +88,7 @@ class UserMediaEntry(BaseModel):
     source: Optional[str]
     startDate: Timestamp
     status: MediaStatus
-    synonyms: List[str]
+    synonyms: Optional[List[str]]
     tags: List[MediaTag]
     title: MediaTitle
     volumes: Optional[int]
@@ -78,10 +96,11 @@ class UserMediaEntry(BaseModel):
 
 class UserMediaListEntry(BaseModel):
     """Represents one media entry for a user's list."""
-    advancedScores: Any
+
+    advancedScores: Optional[Dict[str, Any]]
     completedAt: Timestamp
     createdAt: int
-    customLists: Any
+    customLists: Optional[Dict[str, Any]]
     hiddenFromStatusLists: bool
     id: int
     media: UserMediaEntry
@@ -99,29 +118,38 @@ class UserMediaListEntry(BaseModel):
 
 
 async def get_user_media_list(
-        client: AnilistClient,
-        list_filters: UserMediaListFilters
-    ) -> List[UserMediaListEntry]:
+    client: AnilistClient,
+    user_id: Optional[UserId] = None,
+    user_name: Optional[str] = None,
+    list_filters: UserMediaListFilters = UserMediaListFilters(),
+) -> List[UserMediaListEntry]:
     """Get an Anilist user's media list.
-    
+
     Args:
         client: Anilist client to use when making the request.
-        list_filters: List of filters to use. Make sure provide either a user ID or user name.
+        user_id: Anilist ID of the user. Must be provided if user_name is not.
+        user_name: Anilist user name of the user. Must be provided if user_id is not.
+        list_filters: List of filters to use.
 
     Returns:
         media_list: List of media from a user's list.
     """
 
+    if (user_id is None and user_name is None) or (user_id and user_name):
+        raise ValueError(
+            'Please provide one of either "user_id" or "user_name" (not both).'
+        )
+
     query = Query.media_list(
-        user_id=list_filters.user_id,
-        user_name=list_filters.user_name,
-        type=list_filters.type,
-        status_in=list_filters.status_in,
-        started_at_greater=list_filters.started_at_greater,
-        started_at_lesser=list_filters.started_at_lesser,
         completed_at_greater=list_filters.completed_at_greater,
         completed_at_lesser=list_filters.completed_at_lesser,
-        sort=list_filters.sort
+        sort=list_filters.sort,
+        started_at_greater=list_filters.started_at_greater,
+        started_at_lesser=list_filters.started_at_lesser,
+        status_in=list_filters.status_in,
+        type=list_filters.type,
+        user_id=int(user_id) if user_id else None,
+        user_name=user_name,
     ).fields(
         MediaListFields.advanced_scores,
         MediaListFields.completed_at().fields(
@@ -166,14 +194,14 @@ async def get_user_media_list(
                 MediaTagFields.is_general_spoiler,
                 MediaTagFields.is_media_spoiler,
                 MediaTagFields.name,
-                MediaTagFields.rank
+                MediaTagFields.rank,
             ),
             MediaFields.title().fields(
                 MediaTitleFields.english(),
                 MediaTitleFields.native(),
                 MediaTitleFields.romaji(),
             ),
-            MediaFields.volumes
+            MediaFields.volumes,
         ),
         MediaListFields.media_id,
         MediaListFields.notes,
@@ -197,3 +225,24 @@ async def get_user_media_list(
         media_list.append(UserMediaListEntry(**item))
 
     return media_list
+
+
+async def get_my_media_list(
+    client: AnilistClient,
+    list_filters: UserMediaListFilters = UserMediaListFilters(),
+) -> List[UserMediaListEntry]:
+    """Get media list of the current global user.
+
+    Args:
+        client: Anilist client to use when making the request.
+        list_filters: List of filters to use.
+
+    Returns:
+        media_list: Media list of the current global user.
+    """
+
+    return await get_user_media_list(
+        client,
+        user_id=get_global_user(raise_if_missing=True),
+        list_filters=list_filters,
+    )

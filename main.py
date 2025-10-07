@@ -1,14 +1,16 @@
 import argparse
 
 import asyncio
+from datetime import datetime, timedelta
 
 from nifty_anilist import AnilistClient, sign_in_if_no_global
 from nifty_anilist.client.custom_fields import (
-    FuzzyDateFields,
     MediaFields,
     MediaListFields,
     MediaListSort,
     MediaListStatus,
+    MediaSort,
+    MediaStatus,
     MediaTitleFields,
     MediaType,
     ScoreFormat,
@@ -16,7 +18,7 @@ from nifty_anilist.client.custom_fields import (
     UserFields,
 )
 from nifty_anilist.client.custom_queries import Query
-from nifty_anilist.prebuilt.media_list import get_user_media_list, UserMediaListFilters
+from nifty_anilist.prebuilt import get_media_list, MediaListFilters, get_user_media_list, UserMediaListFilters
 
 
 async def test_get_avatar(username: str):
@@ -34,43 +36,65 @@ async def test_get_avatar(username: str):
 
 
 async def test_get_user_completed_anime_list(username: str):
-    """Simple test to get all of a user's completed anime with a prebuilt function."""
+    """Test to get all of a user's completed anime with a prebuilt function."""
     async with AnilistClient() as client:
-        filters = UserMediaListFilters()
-        filters.user_name = username
-        filters.type = MediaType.ANIME
-        filters.status_in = [MediaListStatus.COMPLETED]
-        anile_list = await get_user_media_list(client, filters)
+        filters = UserMediaListFilters(
+            type=MediaType.ANIME, status_in=[MediaListStatus.COMPLETED]
+        )
+        anime_list = await get_user_media_list(
+            client, user_name=username, list_filters=filters
+        )
 
-        for anime in anile_list:
+        for anime in anime_list:
             print(
                 f"[{anime.mediaId}] {anime.media.title.native} ({anime.media.title.romaji}): {anime.score}/100"
             )
 
 
+async def test_get_recent_anime():
+    """Test to get some recently aired (completed) anime with a prebuilt function."""
+    async with AnilistClient() as client:
+        one_year_ago = datetime.today() - timedelta(days=365)
+        fuzz_date = int(one_year_ago.strftime("%Y%m%d"))
+
+        filters = MediaListFilters(
+            type=MediaType.ANIME,
+            status_in=[MediaStatus.FINISHED],
+            start_date_greater=fuzz_date,
+        )
+        anime_list = await get_media_list(client, list_filters=filters)
+
+        for anime in anime_list:
+            print(
+                f"[{anime.id}] {anime.title.native} ({anime.title.romaji}): {anime.meanScore}/100"
+            )
+
+
+async def test_get_popular_manga():
+    """Test to get the most popular completed manga with a prebuilt function."""
+    async with AnilistClient() as client:
+        filters = MediaListFilters(
+            type=MediaType.MANGA, sort=[MediaSort.SCORE_DESC], max_media_count=100
+        )
+        manga_list = await get_media_list(client, list_filters=filters)
+
+        for manga in manga_list:
+            print(
+                f"[{manga.id}] {manga.title.native} ({manga.title.romaji}): {manga.meanScore}/100"
+            )
+
+
 async def test_get_user_completed_anime_list_manual(username: str):
-    """Simple test to get all of a user's completed anime manually."""
+    """Test to get all of a user's completed anime manually."""
     async with AnilistClient() as client:
         query = Query.media_list(
             user_name=username,
             type=MediaType.ANIME,
             status_in=[MediaListStatus.COMPLETED],
-            sort=[MediaListSort.SCORE_DESC, MediaListSort.MEDIA_ID],
+            sort=[MediaListSort.MEDIA_TITLE_NATIVE, MediaListSort.MEDIA_ID],
         ).fields(
-            MediaListFields.id,
             MediaListFields.media_id,
-            MediaListFields.status,
             MediaListFields.score(format=ScoreFormat.POINT_100),
-            MediaListFields.progress,
-            MediaListFields.started_at().fields(
-                FuzzyDateFields.year, FuzzyDateFields.month, FuzzyDateFields.day
-            ),
-            MediaListFields.completed_at().fields(
-                FuzzyDateFields.year, FuzzyDateFields.month, FuzzyDateFields.day
-            ),
-            MediaListFields.notes,
-            MediaListFields.hidden_from_status_lists,
-            MediaListFields.custom_lists(),
             MediaListFields.media().fields(
                 MediaFields.title().fields(
                     MediaTitleFields.native(),
@@ -96,19 +120,31 @@ if __name__ == "__main__":
         "--get-avatar",
         dest="avatar",
         action="store_true",
-        help='Enable the "test_get_avatar" test.',
+        help='Run the "test_get_avatar" test.',
+    )
+    parser.add_argument(
+        "--get-recent-anime",
+        dest="get_recent_anime",
+        action="store_true",
+        help='Run the "get_recent_anime" test.',
+    )
+    parser.add_argument(
+        "--get-popular-manga",
+        dest="get_popular_manga",
+        action="store_true",
+        help='Run the "get_popular_manga" test.',
     )
     parser.add_argument(
         "--get-user-completed-anime-list",
         dest="anime_list",
         action="store_true",
-        help='Enable the "test_get_avatar" test.',
+        help='Run the "test_get_avatar" test.',
     )
     parser.add_argument(
         "--get-user-completed-anime-list-manual",
         dest="anime_list_manual",
         action="store_true",
-        help='Enable the "test_get_avatar" test.',
+        help='Run the "test_get_avatar" test.',
     )
     args = parser.parse_args()
 
@@ -116,14 +152,26 @@ if __name__ == "__main__":
     sign_in_if_no_global()
 
     # Get username of user to get info for.
-    username = input("Username: ")
+    username: str | None = None
 
     # Run tests depending on input arguments.
     if args.avatar:
+        if username is None:
+            username = input("Username: ")
         asyncio.run(test_get_avatar(username))
 
     if args.anime_list:
+        if username is None:
+            username = input("Username: ")
         asyncio.run(test_get_user_completed_anime_list(username))
 
+    if args.get_recent_anime:
+        asyncio.run(test_get_recent_anime())
+
+    if args.get_popular_manga:
+        asyncio.run(test_get_popular_manga())
+
     if args.anime_list_manual:
+        if username is None:
+            username = input("Username: ")
         asyncio.run(test_get_user_completed_anime_list_manual(username))
