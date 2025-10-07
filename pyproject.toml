@@ -1,6 +1,6 @@
 [project]
 name = "nifty_anilist"
-version = "0.1.5"
+version = "0.1.6"
 description = "Utilities for the Anilist GraphQL API."
 authors = [
     { name="Alexey Polishchuk", email="alexpolishchukmail@gmail.com" }

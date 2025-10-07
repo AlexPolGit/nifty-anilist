@@ -38,7 +38,7 @@ from nifty_anilist.client.custom_fields import UserFields, UserAvatarFields
 
 ...
 
-query = Query.user(name=username).fields(
+query = Query.user(name="username").fields(
     UserFields.avatar().fields(
         UserAvatarFields.large
     )
@@ -48,6 +48,30 @@ response = await client.anilist_request(query)
 
 avatar_url = response["User"]["avatar"]["large"]
 print(f"Avatar URL: {avatar_url}")
+```
+
+There is also a pre-built function for making paginated requests: `paginated_anilist_request()`. This function allows you to skip setting up the `Page` field in your query and merging all the pages by looping through them.
+Instead, you can just provide the (sub)field you actually want to query. Example of getting all of a user's completed anime:
+```py
+query = Query.media_list(
+    user_name="username",
+    type=MediaType.ANIME,
+    status_in=[MediaListStatus.COMPLETED],
+    sort=[MediaListSort.SCORE_DESC, MediaListSort.MEDIA_ID],
+).fields(
+    MediaListFields.score(format=ScoreFormat.POINT_100),
+    MediaListFields.media().fields(
+        MediaFields.title().fields(
+            MediaTitleFields.native(),
+            MediaTitleFields.english(),
+        )
+    )
+)
+
+response = await client.paginated_anilist_request(query)
+
+for anime in response:
+    print(f"{anime["media"]["title"]["native"]} ({anime["media"]["title"]["english"]}): {anime["score"]}/100")
 ```
 
 The client takes an optional user ID to make requests for. If not provided, the client will try to use global user. You can also turn off authentication by setting `use_auth` to `False`.
