@@ -37,11 +37,11 @@ def my_function(my_query):
 
 #### Prebuilt Queries
 
-This library provides a few helpful pre-built queries to Anilist for common operations. These are very customizable, but also come with sensible default values so your code can be very short.
-Additionally, they return type-checked objects so you have a guaranteed structure and don't have to go through string->Any dictionaries for dozen of lines.
+This library provides a few helpful pre-built queries for common operations. These are very customizable, but also come with sensible default values so your code can be very short.
+Additionally, they return type-checked objects so you have a guaranteed structure and don't have to go through dozens of (potentially incorrect) string → Any dictionary lookups all the time.
 These queries are imported from `nifty_anilist.prebuilt`.
 
-These queries can be used as follows:
+They can be used as follows:
 ```py
 from nifty_anilist.client.custom_fields import MediaListStatus, MediaType
 from nifty_anilist.prebuilt import get_user_media_list, UserMediaListFilters
@@ -56,7 +56,7 @@ async def get_user_completed_anime_list(username: str):
         )
 ```
 
-These functions all require a client as input and will sometimes have function-specific mandatory inputs. In most cases, leaving the `list_filters` parameter empty will use all defaults.
+All prebuilt queries require a client as input and will sometimes have function-specific mandatory inputs. In most cases, leaving the `list_filters` parameter empty will use all defaults.
 
 Below is a list of currently available pre-built queries.
 
