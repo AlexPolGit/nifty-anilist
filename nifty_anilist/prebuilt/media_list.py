@@ -100,7 +100,7 @@ class UserMediaListEntry(BaseModel):
     advancedScores: Optional[Dict[str, Any]]
     completedAt: Timestamp
     createdAt: int
-    customLists: Optional[Dict[str, Any]]
+    customLists: Optional[list[Dict[str, Any]]]
     hiddenFromStatusLists: bool
     id: int
     media: UserMediaEntry
